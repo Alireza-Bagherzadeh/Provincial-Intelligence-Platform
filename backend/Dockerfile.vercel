@@ -1,0 +1,38 @@
+FROM python:3.12-slim-bookworm
+
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gdal-bin \
+    libgdal-dev \
+    libgeos-dev \
+    proj-bin \
+    libproj-dev \
+    libpq-dev \
+    gcc \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY pyproject.toml ./
+COPY uv.lock* ./
+
+RUN pip install --no-cache-dir uv
+
+RUN if [ -f uv.lock ]; then \
+      uv sync --frozen --no-dev; \
+    else \
+      uv sync --no-dev; \
+    fi
+
+COPY . .
+
+ENV PATH="/app/.venv/bin:$PATH"
+
+RUN DJANGO_SECRET_KEY=build-only-secret \
+    DJANGO_DEBUG=false \
+    python manage.py collectstatic --noinput
+
+CMD ["sh", "-c", "gunicorn config.wsgi:application --bind 0.0.0.0:${PORT}"]
