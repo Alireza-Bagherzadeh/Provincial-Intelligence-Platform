@@ -15,7 +15,7 @@ dependencies = [
   "django-storages[s3]>=1.14,<2",
   "pydantic>=2.11,<3",
   "google-genai>=2.3,<3",
-  "python-dotenv>=1.0,<2"
+  "python-dotenv>=1.0,<2",
   "dj-database-url",
 
 ]
