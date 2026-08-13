@@ -1,0 +1,9 @@
+# backend/config/settings.py -> INSTALLED_APPS
+# Add:
+"apps.ingestion",
+
+# In production set these environment variables (do NOT hard-code real secrets):
+# COLLECTOR_API_KEY=<same-secret-as-local-collector>
+# COLLECTOR_AUTO_PUBLISH=true
+# GEMINI_API_KEY=...
+# GEMINI_MODEL=<the-model-you-have-selected>

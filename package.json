@@ -1,0 +1,10 @@
+{
+  "name": "semnan-smart-governance-v4",
+  "private": true,
+  "version": "0.4.0",
+  "scripts": {
+    "frontend": "npm --prefix frontend run dev",
+    "frontend:build": "npm --prefix frontend run build",
+    "frontend:typecheck": "npm --prefix frontend run typecheck"
+  }
+}
