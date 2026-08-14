@@ -22,7 +22,7 @@ export function ProvinceMap({ counties, expanded = false }: { counties: CountySn
 
   return <article className={`card province-map-card ${expanded ? "expanded" : ""}`}>
     <div className="card-header">
-      <div><h2>نقشه تعاملی استان سمنان</h2><span className="map-caption">مرزبندی شماتیک مطابق نقشه مرجع؛ شاخص‌ها از GraphQL دریافت می‌شوند.</span></div>
+      <div><h2>نقشه تعاملی استان سمنان</h2><span className="map-caption">مرور وضعیت شهرستان‌ها، پروژه‌ها و موارد نیازمند توجه.</span></div>
       <div className="layer-switches">{layers.map((layer) => <button type="button" key={layer.id} onClick={() => toggleLayer(layer.id)} className={activeLayers.includes(layer.id) ? "active" : ""} aria-pressed={activeLayers.includes(layer.id)}>{layer.label}</button>)}</div>
     </div>
 
@@ -50,7 +50,7 @@ export function ProvinceMap({ counties, expanded = false }: { counties: CountySn
     </div>
 
     {selected ? <section className="map-drawer" aria-live="polite">
-      <div><span>شهرستان انتخاب‌شده</span><h3>{selected.name}</h3><p>{selected.isDemo ? "دادهٔ نمایشی ثبت‌شده در پایگاه داده" : "دادهٔ عملیاتی"}</p></div>
+      <div><span>شهرستان انتخاب‌شده</span><h3>{selected.name}</h3><p>خلاصه وضعیت عملکردی</p></div>
       <div className="map-stats">
         <span><b>{selected.projectCount}</b> پروژه</span>
         <span><b>{selected.criticalProjectCount}</b> هشدار بحرانی</span>

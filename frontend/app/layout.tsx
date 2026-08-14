@@ -1,11 +1,18 @@
 import type { Metadata } from "next";
+import type { ReactNode } from "react";
 import "./globals.css";
+import "./home.css";
 
 export const metadata: Metadata = {
-  title: "سامانه هوشمند حکمرانی استان سمنان",
-  description: "درگاه عمومی استانداری سمنان و داده‌های شفاف استانی"
+  title: "سمنان هوشمند | درگاه حکمرانی و تصمیم‌سازی استان",
+  description: "درگاه یکپارچه داده، تحلیل، پروژه‌ها و خدمات هوشمند استان سمنان"
 };
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="fa" dir="rtl"><body>{children}</body></html>;
+const themeScript = `(() => { try { const saved = localStorage.getItem('semnan-theme'); const preferred = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'; document.documentElement.dataset.theme = saved || preferred; } catch (_) { document.documentElement.dataset.theme = 'dark'; } })();`;
+
+export default function RootLayout({ children }: { children: ReactNode }) {
+  return <html lang="fa" dir="rtl" suppressHydrationWarning>
+    <head><script dangerouslySetInnerHTML={{ __html: themeScript }} /></head>
+    <body>{children}</body>
+  </html>;
 }

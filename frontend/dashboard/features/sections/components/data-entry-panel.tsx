@@ -191,7 +191,7 @@ const resources: ResourceConfig[] = [
       { name: "unit", label: "واحد" },
       { name: "risk_level", label: "سطح ریسک", type: "select", options: statusHealth, required: true },
       { name: "confidence", label: "اعتماد (%)", type: "number", min: 0, max: 100, step: 1, required: true },
-      { name: "methodology", label: "روش / مدل", placeholder: "Gemini scenario / statistical model" },
+      { name: "methodology", label: "روش تحلیل", placeholder: "تحلیل روند، مدل آماری یا نظر کارشناسی" },
       { name: "county_id", label: "شهرستان", type: "select", lookup: "counties", options: [{ value: "", label: "کل استان" }] }
     ]
   },
@@ -449,7 +449,7 @@ export function DataEntryPanel() {
 
       <article className="card records-card">
         <header className="crud-card-head records-head">
-          <div><span className="section-kicker">DATABASE RECORDS</span><h3>{resource.label}های ثبت‌شده</h3><p>{loading ? "در حال دریافت..." : `${items.length} رکورد`}</p></div>
+          <div><span className="section-kicker">سوابق ثبت‌شده</span><h3>{resource.label}های ثبت‌شده</h3><p>{loading ? "در حال دریافت..." : `${items.length} رکورد`}</p></div>
           <form className="records-search" onSubmit={(event: FormEvent) => { event.preventDefault(); void loadRecords(search); }}>
             <input value={search} onChange={(event: ChangeEvent<HTMLInputElement>) => setSearch(event.target.value)} placeholder="جست‌وجو..." />
             <button type="submit">جست‌وجو</button>
@@ -466,7 +466,7 @@ export function DataEntryPanel() {
                 const text = stringValue(relationLabel ?? item[field]);
                 return text ? <span key={field}>{text}</span> : null;
               })}</div>
-              {item.is_demo ? <small className="demo-tag">داده نمایشی</small> : <small className="real-tag">داده ثبت‌شده</small>}
+              <small className="real-tag">ثبت‌شده</small>
             </div>
             <div className="record-actions">
               <button type="button" onClick={() => editItem(item)}>ویرایش</button>

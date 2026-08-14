@@ -7,5 +7,6 @@ export const metadata: Metadata = {
 };
 
 export default function CommandLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return children;
+  const themeScript = `try{var t=localStorage.getItem("semnan-theme");document.documentElement.dataset.theme=t==="light"?"light":"dark"}catch(e){document.documentElement.dataset.theme="dark"}`;
+  return <><script dangerouslySetInnerHTML={{ __html: themeScript }} />{children}</>;
 }

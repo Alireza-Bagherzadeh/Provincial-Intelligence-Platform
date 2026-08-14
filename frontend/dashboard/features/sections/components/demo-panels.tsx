@@ -19,6 +19,20 @@ export function AiPanel({ data }: { data: CommandCenterData }) {
     "چه تعهداتی از سخنان مدیریتی باید پیگیری شوند؟"
   ], []);
 
+  const assistantContext = useMemo(() => ({
+    metrics: data.metrics,
+    executiveBrief: data.brief,
+    counties: data.counties,
+    projects: data.projects,
+    alerts: data.alerts,
+    decisions: data.decisions,
+    citizenSignals: data.citizenSignals,
+    news: data.newsArticles,
+    speeches: data.speechInsights,
+    crises: data.crisisSignals,
+    forecasts: data.forecastSignals
+  }), [data]);
+
   async function ask(value: string) {
     const cleaned = value.trim();
     if (!cleaned || loading) return;
@@ -29,14 +43,14 @@ export function AiPanel({ data }: { data: CommandCenterData }) {
       const response = await fetch("/api/assistant", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ question: cleaned })
+        body: JSON.stringify({ question: cleaned, context: assistantContext })
       });
       const result = await response.json();
       if (!response.ok) throw new Error(result.error ?? "پاسخ دستیار در دسترس نیست");
       setAnswer(result.answer);
       setModel(result.model ?? null);
     } catch (error) {
-      setAnswer(error instanceof Error ? `خطا: ${error.message}` : "خطای ناشناخته در دستیار هوشمند");
+      setAnswer(error instanceof Error ? error.message : "دستیار هوشمند موقتاً در دسترس نیست.");
     } finally {
       setLoading(false);
     }

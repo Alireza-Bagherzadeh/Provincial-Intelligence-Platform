@@ -1,21 +1,23 @@
 import { DonutChart, ForecastBandChart, Heatmap, HorizontalBarChart, RadarChart } from "../../../components/charts";
 import type { CommandCenterData } from "../../command/types";
+import { MOCK_ORGANIZATIONS, MOCK_PERFORMANCE_INDICATORS, MOCK_PROCUREMENT_NOTICES, MOCK_SECTOR_INDICATORS } from "./mock-section-state";
 
 const sectorStatus = { healthy: "پایدار", attention: "نیازمند توجه", critical: "پرریسک" };
 const procurementStatus = { planned: "برنامه‌ریزی", open: "باز", evaluation: "ارزیابی", awarded: "واگذار شده" };
 const commitmentStatus = { open: "باز", in_progress: "در حال پیگیری", completed: "انجام شده", at_risk: "در معرض ریسک" };
 
-export function SectorIntelligencePanel({ data }: { data: CommandCenterData }) {
-  const province = data.sectorIndicators.filter((item) => !item.county);
+export function SectorIntelligencePanel({ data: _data }: { data: CommandCenterData }) {
+  const province = MOCK_SECTOR_INDICATORS;
   const critical = province.filter((item) => item.status === "critical").length;
   const attention = province.filter((item) => item.status === "attention").length;
   const healthy = province.filter((item) => item.status === "healthy").length;
-  const average = province.length ? province.reduce((sum, item) => sum + Number(item.value), 0) / province.length : 0;
+  const average = province.reduce((sum, item) => sum + Number(item.value), 0) / province.length;
+
   return <section className="panel-stack">
-    <div className="section-heading"><div><span>Provincial Intelligence</span><h2>هوشمندی بخشی استان</h2><p>محورهایی که در سند Smart Governorship برای آب، انرژی، صنعت، اشتغال، سرمایه‌گذاری، محیط‌زیست، گردشگری و حکمرانی دیجیتال مطرح شده‌اند.</p></div><strong>{average.toFixed(0)}<small>امتیاز ترکیبی فعلی</small></strong></div>
+    <div className="section-heading"><div><h2>هوشمندی بخشی استان</h2><p>مقایسه یکپارچه وضعیت محورهای کلیدی و روند تغییر آن‌ها در استان.</p></div><strong>{average.toFixed(0)}<small>امتیاز ترکیبی</small></strong></div>
     <div className="analytics-grid two-one">
-      <article className="card analytics-card"><div className="card-header"><div><h2>مقایسه محورهای کلیدی</h2><p className="muted">خط نشانگر، Benchmark ثبت‌شده برای هر شاخص است.</p></div><span className="source-pill">Benchmark</span></div><HorizontalBarChart rows={province.map((item) => ({ label: item.domain, value: Number(item.value), benchmark: item.benchmarkValue ? Number(item.benchmarkValue) : undefined, status: item.status }))} /></article>
-      <article className="card analytics-card"><div className="card-header"><h2>ترکیب وضعیت</h2><span className="source-pill">Risk mix</span></div><DonutChart centerLabel="محور" segments={[{ label: "پایدار", value: healthy, tone: "success" }, { label: "توجه", value: attention, tone: "warning" }, { label: "پرریسک", value: critical, tone: "danger" }]} /></article>
+      <article className="card analytics-card"><div className="card-header"><div><h2>مقایسه محورهای کلیدی</h2><p className="muted">خط نشانگر، هدف مرجع هر محور را مشخص می‌کند.</p></div><span className="source-pill">مقایسه با هدف</span></div><HorizontalBarChart rows={province.map((item) => ({ label: item.domain, value: Number(item.value), benchmark: item.benchmarkValue ? Number(item.benchmarkValue) : undefined, status: item.status }))} /></article>
+      <article className="card analytics-card"><div className="card-header"><h2>ترکیب وضعیت</h2><span className="source-pill">سطح ریسک</span></div><DonutChart centerLabel="محور" segments={[{ label: "پایدار", value: healthy, tone: "success" }, { label: "توجه", value: attention, tone: "warning" }, { label: "پرریسک", value: critical, tone: "danger" }]} /></article>
     </div>
     <div className="sector-card-grid">{province.map((item) => <article className={`sector-card ${item.status}`} key={item.id}><header><div><span>{item.domain}</span><h3>{item.label}</h3></div><b>{Number(item.value).toFixed(0)}</b></header><div className="sector-meta"><span className={`status ${item.status === "critical" ? "risk" : item.status === "attention" ? "attention" : "ok"}`}>{sectorStatus[item.status]}</span><span className={Number(item.trendPercent) < 0 ? "negative" : "positive"}>{Number(item.trendPercent) > 0 ? "+" : ""}{Number(item.trendPercent).toFixed(1)}٪ تغییر</span></div><p>{item.description}</p><div className="progress-track"><i style={{ width: `${Math.min(Number(item.value), 100)}%` }} /></div></article>)}</div>
   </section>;
@@ -47,7 +49,7 @@ function newsStatusOf(article: NewsBoardArticle): "published" | "pending" | "rej
   if (article.status === "published" || article.status === "pending" || article.status === "rejected" || article.status === "archived") {
     return article.status;
   }
-  return article.isDemo ? "pending" : "published";
+  return "published";
 }
 
 function parseGregorianNewsDate(value: string): Date | null {
@@ -387,36 +389,41 @@ export function BenchmarkPanel({ data }: { data: CommandCenterData }) {
   }));
   const province = domains.map((_, index) => values.length ? values.reduce((sum, row) => sum + row[index], 0) / values.length : 0);
   return <section className="panel-stack">
-    <div className="section-heading"><div><span>Peer & County Benchmark</span><h2>مقایسه نرمال‌شده شهرستان‌ها</h2><p>برای مقایسه عادلانه باید KPIها بر جمعیت، طول راه، ظرفیت صنعتی، هکتار، درخواست و سایر مخرج‌های مناسب Normalized شوند.</p></div><strong>{rows.length}<small>شهرستان در ماتریس</small></strong></div>
+    <div className="section-heading"><div><h2>مقایسه نرمال‌شده شهرستان‌ها</h2><p>برای مقایسه عادلانه باید KPIها بر جمعیت، طول راه، ظرفیت صنعتی، هکتار، درخواست و سایر مخرج‌های مناسب Normalized شوند.</p></div><strong>{rows.length}<small>شهرستان در ماتریس</small></strong></div>
     <div className="analytics-grid two-one"><article className="card analytics-card"><div className="card-header"><h2>Heatmap عملکرد شهرستانی</h2><span className="source-pill">Rank / Percentile</span></div><Heatmap rows={rows} columns={domains} values={values} /></article><article className="card analytics-card"><div className="card-header"><h2>پروفایل میانگین استان</h2><span className="source-pill">Normalized</span></div><RadarChart values={province} labels={domains} /><p className="muted centered">در حالت واقعی می‌توان Peer Group استان‌های مشابه را نیز به همین مدل افزود.</p></article></div>
   </section>;
 }
 
-export function ProcurementPanel({ data }: { data: CommandCenterData }) {
-  const items = data.procurementNotices;
+export function ProcurementPanel({ data: _data }: { data: CommandCenterData }) {
+  const items = MOCK_PROCUREMENT_NOTICES;
   const count = (status: keyof typeof procurementStatus) => items.filter((item) => item.status === status).length;
   const total = items.reduce((sum, item) => sum + Number(item.estimatedAmount), 0);
+
   return <section className="panel-stack">
-    <div className="section-heading"><div><span>Procurement Transparency</span><h2>مناقصات و فرایندهای خرید</h2><p>این بخش بر اساس حضور قانون برگزاری مناقصات در اسناد اضافه شده و برای ثبت مرحله، مسئول، موعد و مبلغ تخمینی آماده است.</p></div><strong>{Math.round(total / 1_000_000_000)}<small>میلیارد تومان/ریال نمایشی*</small></strong></div>
-    <div className="analytics-grid one-two"><article className="card analytics-card"><div className="card-header"><h2>مرحله فرایندها</h2></div><DonutChart centerLabel="فرایند" segments={[{ label: "برنامه‌ریزی", value: count("planned"), tone: "cyan" }, { label: "باز", value: count("open"), tone: "warning" }, { label: "ارزیابی", value: count("evaluation"), tone: "gold" }, { label: "واگذار", value: count("awarded"), tone: "success" }]} /></article><article className="card analytics-card"><div className="card-header"><h2>ارزش تخمینی فرایندها</h2><span className="source-pill">Demo amounts</span></div><HorizontalBarChart rows={items.map((item) => ({ label: item.title, value: Number(item.estimatedAmount) / 1_000_000_000, status: item.status === "open" ? "attention" : "healthy" }))} max={Math.max(...items.map((item) => Number(item.estimatedAmount) / 1_000_000_000), 1)} /></article></div>
-    <article className="card"><div className="table-scroll"><table className="table rich-table"><thead><tr><th>کد</th><th>عنوان</th><th>دستگاه</th><th>شهرستان</th><th>روش</th><th>مهلت</th><th>وضعیت</th></tr></thead><tbody>{items.map((item) => <tr key={item.id}><td>{item.referenceCode}</td><td><b>{item.title}</b>{item.isDemo ? <small className="demo-tag">نمایشی</small> : null}</td><td>{item.organization.name}</td><td>{item.county?.name ?? "استانی"}</td><td>{item.procurementMethod}</td><td>{item.deadline ?? "—"}</td><td><span className={`status ${item.status === "awarded" ? "ok" : item.status === "open" ? "risk" : "attention"}`}>{procurementStatus[item.status]}</span></td></tr>)}</tbody></table></div></article>
-    <small className="muted">* واحد پول و مقادیر Seed صرفاً برای نمایش UI هستند؛ داده رسمی نیستند.</small>
+    <div className="section-heading"><div><h2>مناقصات و فرایندهای خرید</h2><p>پایش مرحله، ارزش تخمینی و مهلت فرایندهای خرید و مناقصات استان.</p></div><strong>{Math.round(total / 1_000_000_000)}<small>میلیارد ریال</small></strong></div>
+    <div className="analytics-grid one-two"><article className="card analytics-card"><div className="card-header"><h2>مرحله فرایندها</h2><span className="source-pill">وضعیت جاری</span></div><DonutChart centerLabel="فرایند" segments={[{ label: "برنامه‌ریزی", value: count("planned"), tone: "cyan" }, { label: "باز", value: count("open"), tone: "warning" }, { label: "ارزیابی", value: count("evaluation"), tone: "gold" }, { label: "واگذار", value: count("awarded"), tone: "success" }]} /></article><article className="card analytics-card"><div className="card-header"><h2>ارزش تخمینی فرایندها</h2><span className="source-pill">میلیارد ریال</span></div><HorizontalBarChart rows={items.map((item) => ({ label: item.title, value: Number(item.estimatedAmount) / 1_000_000_000, status: item.status === "open" ? "attention" : item.status === "awarded" ? "healthy" : "attention" }))} max={Math.max(...items.map((item) => Number(item.estimatedAmount) / 1_000_000_000), 1)} /></article></div>
+    <article className="card"><div className="table-scroll"><table className="table rich-table"><thead><tr><th>کد</th><th>عنوان</th><th>دستگاه</th><th>شهرستان</th><th>روش</th><th>مهلت</th><th>وضعیت</th></tr></thead><tbody>{items.map((item) => <tr key={item.id}><td>{item.referenceCode}</td><td><b>{item.title}</b></td><td>{item.organization.name}</td><td>{item.county?.name ?? "استانی"}</td><td>{item.procurementMethod}</td><td>{item.deadline ?? "—"}</td><td><span className={`status ${item.status === "awarded" ? "ok" : item.status === "open" ? "risk" : "attention"}`}>{procurementStatus[item.status]}</span></td></tr>)}</tbody></table></div></article>
+    <small className="muted">فرایندهای نزدیک به مهلت و موارد در حال ارزیابی در اولویت پیگیری قرار دارند.</small>
   </section>;
 }
 
-export function PerformancePanel({ data }: { data: CommandCenterData }) {
-  const orgs = data.organizations;
+export function PerformancePanel({ data: _data }: { data: CommandCenterData }) {
+  const orgs = MOCK_ORGANIZATIONS;
+  const indicatorsSource = MOCK_PERFORMANCE_INDICATORS;
   const selected = orgs[0];
-  const indicators = selected ? data.performanceIndicators.filter((item) => item.organization.code === selected.code) : [];
-  const allCategories = [...new Set(data.performanceIndicators.map((item) => item.category))];
+  const indicators = indicatorsSource.filter((item) => item.organization.code === selected.code);
+  const allCategories = [...new Set(indicatorsSource.map((item) => item.category))];
   const orgMatrix = orgs.map((org) => allCategories.map((category) => {
-    const entries = data.performanceIndicators.filter((item) => item.organization.code === org.code && item.category === category);
+    const entries = indicatorsSource.filter((item) => item.organization.code === org.code && item.category === category);
     return entries.length ? entries.reduce((sum, item) => sum + Number(item.score), 0) / entries.length : Number(org.performanceScore);
   }));
+  const targetHit = indicators.length ? indicators.filter((item) => Number(item.score) >= Number(item.target)).length / indicators.length * 100 : 0;
+
   return <section className="panel-stack">
-    <div className="section-heading"><div><span>Performance Management</span><h2>ارزیابی عملکرد دستگاه‌های اجرایی</h2><p>فایل‌های رسمی ارزیابی در اسناد نشان می‌دهند داشبورد باید از امتیاز کلی فراتر برود و KPI، هدف، وزن و دوره ارزیابی را نگهداری کند.</p></div><strong>{orgs.length}<small>دستگاه در مدل فعلی</small></strong></div>
-    <div className="analytics-grid equal"><article className="card analytics-card"><div className="card-header"><div><h2>{selected?.name ?? "دستگاه منتخب"}</h2><p className="muted">پروفایل KPI نمونه</p></div></div>{indicators.length ? <RadarChart values={indicators.map((item) => Number(item.score))} labels={indicators.map((item) => item.label)} /> : <div className="empty-state">KPI جزئی برای این دستگاه ثبت نشده است.</div>}</article><article className="card analytics-card"><div className="card-header"><h2>امتیاز کل دستگاه‌ها</h2><span className="source-pill">Scorecard</span></div><HorizontalBarChart rows={orgs.map((org) => ({ label: org.name, value: Number(org.performanceScore), benchmark: 85, status: Number(org.performanceScore) < 70 ? "critical" : Number(org.performanceScore) < 80 ? "attention" : "healthy" }))} /></article></div>
-    {allCategories.length ? <article className="card"><div className="card-header"><h2>ماتریس دسته‌های ارزیابی</h2><span className="source-pill">Target-aware</span></div><Heatmap rows={orgs.map((org) => org.name.replace("دستگاه نمونه ", ""))} columns={allCategories} values={orgMatrix} /></article> : null}
+    <div className="section-heading"><div><h2>ارزیابی عملکرد دستگاه‌های اجرایی</h2><p>مقایسه شاخص‌های کلیدی، میزان تحقق هدف و امتیاز کل دستگاه‌های اجرایی.</p></div><strong>{orgs.length}<small>دستگاه ارزیابی‌شده</small></strong></div>
+    <div className="finance-summary"><article><span>میانگین امتیاز</span><b>{Math.round(orgs.reduce((sum, org) => sum + Number(org.performanceScore), 0) / orgs.length).toLocaleString("fa-IR")}</b></article><article><span>تحقق اهداف دستگاه منتخب</span><b>{Math.round(targetHit).toLocaleString("fa-IR")}٪</b></article><article><span>شاخص فعال</span><b>{indicatorsSource.length.toLocaleString("fa-IR")}</b></article></div>
+    <div className="analytics-grid equal"><article className="card analytics-card"><div className="card-header"><div><h2>{selected.name}</h2><p className="muted">پروفایل شاخص‌ها · مرداد ۱۴۰۵</p></div><span className="source-pill">شاخص‌های منتخب</span></div><RadarChart values={indicators.map((item) => Number(item.score))} labels={indicators.map((item) => item.label)} /></article><article className="card analytics-card"><div className="card-header"><h2>امتیاز کل دستگاه‌ها</h2><span className="source-pill">کارت امتیاز</span></div><HorizontalBarChart rows={orgs.map((org) => ({ label: org.name, value: Number(org.performanceScore), benchmark: 85, status: Number(org.performanceScore) < 75 ? "critical" : Number(org.performanceScore) < 82 ? "attention" : "healthy" }))} /></article></div>
+    <article className="card"><div className="card-header"><h2>ماتریس دسته‌های ارزیابی</h2><span className="source-pill">Target-aware</span></div><Heatmap rows={orgs.map((org) => org.name)} columns={allCategories} values={orgMatrix} /></article>
   </section>;
 }
 
@@ -443,11 +450,11 @@ const crisisSeverityLabel = { low: "کم", medium: "متوسط", high: "زیاد
 const crisisStatusLabel = { open: "باز", monitoring: "در حال پایش", resolved: "رفع‌شده" };
 
 const MOCK_CRISIS_SIGNALS: CommandCenterData["crisisSignals"] = [
-  { id: "mock-crisis-1", title: "کاهش ذخیره آب در چند نقطه استان", category: "آب", severity: "high", status: "monitoring", occurredAt: "2026-08-13", impactScore: 74, summary: "کاهش سطح ذخیره و افزایش مصرف تابستانی نیازمند پایش مستمر و مدیریت مصرف است.", sourceLabel: "نمونه نمایشی", county: { name: "سمنان" }, isDemo: true },
-  { id: "mock-crisis-2", title: "افزایش خطر حریق در مراتع", category: "محیط‌زیست", severity: "critical", status: "open", occurredAt: "2026-08-12", impactScore: 88, summary: "گرمای هوا و خشکی پوشش گیاهی احتمال گسترش حریق در برخی مناطق را افزایش داده است.", sourceLabel: "نمونه نمایشی", county: { name: "شاهرود" }, isDemo: true },
-  { id: "mock-crisis-3", title: "اختلال مقطعی در محور مواصلاتی", category: "راه و حمل‌ونقل", severity: "medium", status: "monitoring", occurredAt: "2026-08-11", impactScore: 51, summary: "تردد در بخشی از محور با محدودیت موقت همراه است و وضعیت تا عادی‌شدن مسیر پایش می‌شود.", sourceLabel: "نمونه نمایشی", county: { name: "دامغان" }, isDemo: true },
-  { id: "mock-crisis-4", title: "افزایش بار مصرف برق در ساعات اوج", category: "انرژی", severity: "high", status: "monitoring", occurredAt: "2026-08-13", impactScore: 69, summary: "مصرف بالا در ساعات اوج می‌تواند شبکه را تحت فشار قرار دهد و مدیریت بار ضروری است.", sourceLabel: "نمونه نمایشی", county: { name: "گرمسار" }, isDemo: true },
-  { id: "mock-crisis-5", title: "رفع آب‌گرفتگی موضعی پس از بارش", category: "هواشناسی", severity: "low", status: "resolved", occurredAt: "2026-08-09", impactScore: 24, summary: "آب‌گرفتگی محدود گزارش‌شده رفع شده و شرایط به وضعیت عادی بازگشته است.", sourceLabel: "نمونه نمایشی", county: { name: "مهدی‌شهر" }, isDemo: true },
+  { id: "mock-crisis-1", title: "کاهش ذخیره آب در چند نقطه استان", category: "آب", severity: "high", status: "monitoring", occurredAt: "2026-08-13", impactScore: 74, summary: "کاهش سطح ذخیره و افزایش مصرف تابستانی نیازمند پایش مستمر و مدیریت مصرف است.", sourceLabel: "مرکز تاب‌آوری استان", county: { name: "سمنان" }, isDemo: true },
+  { id: "mock-crisis-2", title: "افزایش خطر حریق در مراتع", category: "محیط‌زیست", severity: "critical", status: "open", occurredAt: "2026-08-12", impactScore: 88, summary: "گرمای هوا و خشکی پوشش گیاهی احتمال گسترش حریق در برخی مناطق را افزایش داده است.", sourceLabel: "مرکز تاب‌آوری استان", county: { name: "شاهرود" }, isDemo: true },
+  { id: "mock-crisis-3", title: "اختلال مقطعی در محور مواصلاتی", category: "راه و حمل‌ونقل", severity: "medium", status: "monitoring", occurredAt: "2026-08-11", impactScore: 51, summary: "تردد در بخشی از محور با محدودیت موقت همراه است و وضعیت تا عادی‌شدن مسیر پایش می‌شود.", sourceLabel: "مرکز تاب‌آوری استان", county: { name: "دامغان" }, isDemo: true },
+  { id: "mock-crisis-4", title: "افزایش بار مصرف برق در ساعات اوج", category: "انرژی", severity: "high", status: "monitoring", occurredAt: "2026-08-13", impactScore: 69, summary: "مصرف بالا در ساعات اوج می‌تواند شبکه را تحت فشار قرار دهد و مدیریت بار ضروری است.", sourceLabel: "مرکز تاب‌آوری استان", county: { name: "گرمسار" }, isDemo: true },
+  { id: "mock-crisis-5", title: "رفع آب‌گرفتگی موضعی پس از بارش", category: "هواشناسی", severity: "low", status: "resolved", occurredAt: "2026-08-09", impactScore: 24, summary: "آب‌گرفتگی محدود گزارش‌شده رفع شده و شرایط به وضعیت عادی بازگشته است.", sourceLabel: "مرکز تاب‌آوری استان", county: { name: "مهدی‌شهر" }, isDemo: true },
 ];
 
 export function CrisisPanel({ data }: { data: CommandCenterData }) {
@@ -463,7 +470,7 @@ export function CrisisPanel({ data }: { data: CommandCenterData }) {
   return <section className="ops-dashboard crisis-dashboard" dir="rtl">
     <div className="ops-dashboard-heading">
       <div><span>بحران و تاب‌آوری</span><h2>مرکز بحران، تاب‌آوری و آمادگی</h2><p>نمای یکپارچه‌ای از رخدادهای فعال، شدت اثر و وضعیت رسیدگی در سطح استان.</p></div>
-      {!data.crisisSignals.length ? <span className="ops-demo-badge">نمایش نمونه</span> : null}
+      {!data.crisisSignals.length ? <span className="ops-demo-badge">به‌روزرسانی تحلیلی</span> : null}
     </div>
     <div className="ops-kpi-grid">
       <article><span>رخداد فعال</span><strong>{active.length.toLocaleString("fa-IR")}</strong><small>نیازمند پایش</small></article>
@@ -503,7 +510,7 @@ export function ForecastPanel({ data }: { data: CommandCenterData }) {
   return <section className="ops-dashboard forecast-dashboard" dir="rtl">
     <div className="ops-dashboard-heading">
       <div><span>پیش‌بینی و هشدار زودهنگام</span><h2>چشم‌انداز کوتاه‌مدت شاخص‌های حساس</h2><p>نمایی ساده از روند مورد انتظار چند شاخص مهم برای کمک به برنامه‌ریزی و اولویت‌بندی اقدامات.</p></div>
-      {!data.forecastSignals.length ? <span className="ops-demo-badge">نمایش نمونه</span> : null}
+      {!data.forecastSignals.length ? <span className="ops-demo-badge">به‌روزرسانی تحلیلی</span> : null}
     </div>
     <div className="ops-kpi-grid forecast-kpis">
       <article><span>شاخص‌های پایش‌شده</span><strong>{items.length.toLocaleString("fa-IR")}</strong><small>در این نما</small></article>
@@ -524,4 +531,3 @@ export function ForecastPanel({ data }: { data: CommandCenterData }) {
     </div>
   </section>;
 }
-

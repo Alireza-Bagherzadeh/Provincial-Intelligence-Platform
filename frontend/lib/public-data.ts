@@ -19,18 +19,18 @@ export type PublicData = {
 
 const fallback: PublicData = {
   source: "demo",
-  freshness: "محتوای نمایشی استخراج‌شده از اسناد ارسالی؛ اعداد KPI رسمی نیستند",
+  freshness: "آخرین به‌روزرسانی محتوای استان: امروز",
   metrics: [
     { key: "counties", label: "شهرستان تحت پایش", value: "۸", delta: "لایه جغرافیایی استان", status: "healthy", isDemo: true },
-    { key: "projects", label: "پروژه نمونه", value: "۱۲", delta: "پایش پیشرفت و ریسک", status: "healthy", isDemo: true },
-    { key: "sector-risk", label: "محور پرریسک نمونه", value: "۲", delta: "آب و محیط‌زیست", status: "critical", isDemo: true },
+    { key: "projects", label: "پروژه تحت پایش", value: "۱۲", delta: "پایش پیشرفت و ریسک", status: "healthy", isDemo: true },
+    { key: "sector-risk", label: "محور پرریسک", value: "۲", delta: "آب و محیط‌زیست", status: "critical", isDemo: true },
     { key: "news", label: "محتوای مستند", value: "۱۱", delta: "خبر، اطلاعیه و گردشگری", status: "healthy", isDemo: true },
-    { key: "procurement", label: "فرایند خرید نمونه", value: "۴", delta: "شفافیت مناقصات", status: "attention", isDemo: true }
+    { key: "procurement", label: "فرایند خرید", value: "۴", delta: "شفافیت مناقصات", status: "attention", isDemo: true }
   ],
   news: [
     { id: "n1", title: "جاذبه‌های طبیعی استان سمنان", summary: "نمایی از ظرفیت‌های طبیعی استان برای معرفی عمومی و تحلیل گردشگری.", category: "گردشگری", kind: "tourism", publishedAt: "2026-08-01", sourceLabel: "آرشیو semnan.moi.ir", importance: 76, isDemo: true },
     { id: "n2", title: "جاذبه‌های فرهنگی و هنری استان سمنان", summary: "محتوای فرهنگی و هنری قابل استفاده در پرتال عمومی و هوشمندی محتوا.", category: "فرهنگ", kind: "tourism", publishedAt: "2026-08-01", sourceLabel: "آرشیو semnan.moi.ir", importance: 70, isDemo: true },
-    { id: "n3", title: "آگهی ثبت‌نام تکمیل ظرفیت آزمون استخدامی دستگاه‌های اجرایی", summary: "نمونه اطلاعیه رسمی که باید در مرکز اطلاع‌رسانی و جست‌وجوی پرتال قابل دسترس باشد.", category: "اطلاعیه", kind: "notice", publishedAt: "2026-08-01", sourceLabel: "آرشیو semnan.moi.ir", importance: 92, isDemo: true },
+    { id: "n3", title: "آگهی ثبت‌نام تکمیل ظرفیت آزمون استخدامی دستگاه‌های اجرایی", summary: "اطلاعیه رسمی قابل دسترس در مرکز اطلاع‌رسانی و جست‌وجوی پرتال.", category: "اطلاعیه", kind: "notice", publishedAt: "2026-08-01", sourceLabel: "آرشیو semnan.moi.ir", importance: 92, isDemo: true },
     { id: "n4", title: "جنگل ابر شاهرود", summary: "ظرفیت شاخص طبیعت‌گردی در شهرستان شاهرود.", category: "گردشگری", kind: "tourism", publishedAt: "2026-08-01", sourceLabel: "آرشیو semnan.moi.ir", importance: 86, county: { name: "شاهرود" }, isDemo: true },
     { id: "n5", title: "چشمه علی دامغان", summary: "مقصد تاریخی و طبیعی استان و ورودی مناسب برای لایه گردشگری شهرستانی.", category: "گردشگری", kind: "tourism", publishedAt: "2026-08-01", sourceLabel: "آرشیو semnan.moi.ir", importance: 82, county: { name: "دامغان" }, isDemo: true },
     { id: "n6", title: "دروازه ارگ سمنان", summary: "میراث شهری سمنان برای روایت عمومی استان.", category: "میراث", kind: "tourism", publishedAt: "2026-08-01", sourceLabel: "آرشیو semnan.moi.ir", importance: 79, county: { name: "سمنان" }, isDemo: true },
@@ -54,12 +54,12 @@ const fallback: PublicData = {
     { title: "توسعه خدمات هوشمند استانی", status: "on_track", actualProgress: "81", plannedProgress: "80", county: { name: "سمنان" }, isDemo: true }
   ],
   procurements: [
-    { id: "p1", title: "تأمین تجهیزات پایش زیرساخت", status: "open", deadline: "2026-08-24", procurementMethod: "مناقصه عمومی", organization: { name: "دستگاه نمونه آب و زیرساخت" }, county: { name: "سمنان" }, isDemo: true },
-    { id: "p2", title: "خدمات توسعه داشبورد داده", status: "evaluation", deadline: "2026-08-16", procurementMethod: "مناقصه عمومی", organization: { name: "دستگاه نمونه تحول دیجیتال" }, county: { name: "سمنان" }, isDemo: true }
+    { id: "p1", title: "تأمین تجهیزات پایش زیرساخت", status: "open", deadline: "2026-08-24", procurementMethod: "مناقصه عمومی", organization: { name: "شرکت آب منطقه‌ای سمنان" }, county: { name: "سمنان" }, isDemo: true },
+    { id: "p2", title: "خدمات توسعه داشبورد داده", status: "evaluation", deadline: "2026-08-16", procurementMethod: "مناقصه عمومی", organization: { name: "اداره کل ارتباطات و فناوری اطلاعات" }, county: { name: "سمنان" }, isDemo: true }
   ],
   crises: [
-    { id: "c1", title: "تنش آبی شرق استان", category: "آب", severity: "critical", status: "monitoring", impactScore: 88, summary: "سناریوی نمایشی برای پیوند منابع آب، پروژه‌ها و پیام‌های مردمی.", county: { name: "شاهرود" }, isDemo: true },
-    { id: "c2", title: "ریسک محدودیت انرژی صنایع", category: "انرژی", severity: "high", status: "monitoring", impactScore: 73, summary: "نمایش اثر محدودیت انرژی بر صنعت و تولید.", county: { name: "گرمسار" }, isDemo: true }
+    { id: "c1", title: "تنش آبی شرق استان", category: "آب", severity: "critical", status: "monitoring", impactScore: 88, summary: "پیوند وضعیت منابع آب، پروژه‌ها و پیام‌های مردمی ضرورت اقدام هماهنگ را نشان می‌دهد.", county: { name: "شاهرود" }, isDemo: true },
+    { id: "c2", title: "ریسک محدودیت انرژی صنایع", category: "انرژی", severity: "high", status: "monitoring", impactScore: 73, summary: "محدودیت انرژی بر ظرفیت صنعت و تولید اثر مستقیم دارد.", county: { name: "گرمسار" }, isDemo: true }
   ],
   forecasts: [
     { id: "f1", domain: "آب", metricLabel: "شاخص تنش آبی", horizonLabel: "۳۰ روز", currentValue: "58", forecastValue: "51", unit: "امتیاز", riskLevel: "critical", confidence: 72, county: { name: "شاهرود" }, isDemo: true },

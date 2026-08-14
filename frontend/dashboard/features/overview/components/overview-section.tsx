@@ -1,8 +1,10 @@
 import { ExecutiveBrief } from "../../../components/executive-brief";
-import { DonutChart, ForecastBandChart, GaugeChart, HorizontalBarChart, LineAreaChart, RadarChart, ScatterPlot, SentimentStack, SparkBars } from "../../../components/charts";
+import { DonutChart, ForecastBandChart, GaugeChart, HorizontalBarChart, LineAreaChart, RadarChart, SentimentStack, SparkBars } from "../../../components/charts";
 import { ProvinceMap } from "../../../components/province-map";
 import type { CommandSectionId } from "../../../components/sidebar";
 import type { CommandCenterData } from "../../command/types";
+import { GovernancePanel } from "../../governance/components/governance-panel";
+import { CountyPortfolioCard } from "./county-portfolio-card";
 
 const statusLabel = { on_track: "مطابق برنامه", attention: "نیازمند توجه", critical: "بحرانی", complete: "تکمیل‌شده" };
 
@@ -29,6 +31,8 @@ export function OverviewSection({ data, onNavigate }: { data: CommandCenterData;
   return <>
     <section className="kpis executive-kpis">{data.metrics.map((metric) => <article className={`kpi kpi-${metric.status}`} key={metric.key}><div className="kpi-top"><label>{metric.label}</label><i /></div><strong>{metric.value}</strong><span className={`delta ${metric.status === "critical" ? "danger" : metric.status === "attention" ? "warn" : ""}`}>{metric.delta}</span></article>)}</section>
 
+    <GovernancePanel />
+
     <section className="analytics-grid equal overview-analytics">
       <article className="card analytics-card"><div className="card-header"><div><h2>نرخ پاسخ‌گویی شهرستانی</h2><p className="muted">Resolved / Requests در داده فعلی صدای مردم</p></div><button type="button" className="text-button" onClick={() => onNavigate("citizen")}>جزئیات</button></div><LineAreaChart values={citizenRates.length ? citizenRates : [0, 0]} labels={citizenLabels} /></article>
       <article className="card analytics-card"><div className="card-header"><div><h2>ترکیب وضعیت پروژه‌ها</h2><p className="muted">نمای سریع Portfolio</p></div><button type="button" className="text-button" onClick={() => onNavigate("projects")}>پروژه‌ها</button></div><DonutChart centerLabel="پروژه" segments={[{ label: "مطابق برنامه", value: projectCounts.on_track, tone: "success" }, { label: "نیازمند توجه", value: projectCounts.attention, tone: "warning" }, { label: "بحرانی", value: projectCounts.critical, tone: "danger" }, { label: "تکمیل", value: projectCounts.complete, tone: "cyan" }]} /></article>
@@ -45,7 +49,7 @@ export function OverviewSection({ data, onNavigate }: { data: CommandCenterData;
     </section>
 
     <section className="analytics-grid equal overview-analytics">
-      <article className="card analytics-card"><div className="card-header"><div><h2>موقعیت شهرستان‌ها در Portfolio</h2><p className="muted">تعداد پروژه در برابر میانگین پیشرفت؛ اندازه نقطه = پروژه بحرانی</p></div><button type="button" className="text-button" onClick={() => onNavigate("benchmark")}>Benchmark</button></div><ScatterPlot xLabel="تعداد پروژه" yLabel="پیشرفت" points={data.counties.map((county) => ({ label: county.name, x: county.projectCount, y: county.averageProgress, size: county.criticalProjectCount * 5, risk: county.criticalProjectCount ? "critical" : county.averageProgress < 60 ? "attention" : "" }))} /></article>
+      <CountyPortfolioCard counties={data.counties} onOpenComparison={() => onNavigate("benchmark")} />
       <article className="card analytics-card"><div className="card-header"><div><h2>Top Early Warnings</h2><p className="muted">ترکیب رخداد و پیش‌بینی برای توجه مدیریتی</p></div></div><div className="alert-list">{activeCrises.slice(0, 4).map((crisis) => <div className={`alert-row ${crisis.severity === "critical" ? "critical" : "attention"}`} key={crisis.id}><i /><div><h3>{crisis.title}</h3><p>{crisis.county?.name ?? "استانی"} · اثر {crisis.impactScore}/100</p></div><span>{crisis.status === "open" ? "باز" : "پایش"}</span></div>)}</div></article>
     </section>
 
@@ -56,6 +60,6 @@ export function OverviewSection({ data, onNavigate }: { data: CommandCenterData;
       <article className="card"><div className="card-header"><div><h2>پروژه‌های نیازمند پیگیری</h2><p className="muted">انحراف برنامه و عملکرد</p></div><button type="button" className="text-button" onClick={() => onNavigate("projects")}>مرکز پروژه‌ها</button></div><div className="table-scroll"><table className="table"><thead><tr><th>پروژه</th><th>شهرستان</th><th>واقعی / برنامه</th><th>وضعیت</th></tr></thead><tbody>{tracked.slice(0, 7).map((project) => <tr key={project.title}><td>{project.title}</td><td>{project.county.name}</td><td>{Number(project.actualProgress).toFixed(0)}٪ / {Number(project.plannedProgress).toFixed(0)}٪</td><td><span className={`status ${project.status === "on_track" ? "ok" : project.status === "critical" ? "risk" : "attention"}`}>{statusLabel[project.status]}</span></td></tr>)}</tbody></table></div></article>
     </section>
 
-    <section className="ai-card enhanced-ai-card"><div><span className="section-kicker">Governor Command Center</span><h2>خلاصه‌ساز اجرایی + Provincial RAG</h2><p>خلاصه مدیریتی، Top Issues، ریسک پروژه، صدای مردم، سخنان و تعهدات در یک سطح تصمیم‌گیری جمع می‌شوند.</p></div><button type="button" onClick={() => onNavigate("ai")}>باز کردن دستیار</button></section>
+    <section className="ai-card enhanced-ai-card"><div><span className="section-kicker">دستیار هوشمند</span><h2>خلاصه‌ساز اجرایی</h2><p>خلاصه مدیریتی، مشکلات مهم، ریسک پروژه، صدای مردم، سخنان و تعهدات در یک سطح تصمیم‌گیری جمع می‌شوند.</p></div><button type="button" onClick={() => onNavigate("ai")}>باز کردن دستیار</button></section>
   </>;
 }
