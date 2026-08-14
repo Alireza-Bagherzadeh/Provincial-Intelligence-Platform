@@ -26,23 +26,23 @@ export function CommandCenter({ data }: { data: CommandCenterData }) {
   return <main className="command">
     <Sidebar activeSection={activeSection} onSelect={navigate} />
     <section className={`main ${isManage ? "manage-main" : ""}`}>
-      {!isManage ? <>
-        <header className="topbar">
-          <div className="breadcrumb">مرکز فرماندهی / {active.label}</div>
-          <div className="top-actions">
-            <select className="mobile-nav" value={activeSection} onChange={(event) => navigate(event.target.value as CommandSectionId)} aria-label="انتخاب بخش مرکز فرماندهی">
-              {commandSections.map((section) => <option value={section.id} key={section.id}>{section.label}</option>)}
-            </select>
-            <ThemeToggle />
-            <button type="button" className="filter data-entry-shortcut" onClick={() => navigate("manage")}>+ ورود داده</button>
-            <button type="button" className="filter">این ماه</button>
-            <button type="button" className="filter">همهٔ شهرستان‌ها</button>
-            <div className="governor-profile" aria-label="پروفایل استاندار سمنان">
-              <span className="avatar">م‌ک</span>
-              <span><strong>محمدجواد کولیوند</strong><small>استاندار سمنان</small></span>
-            </div>
+      <header className={`topbar ${isManage ? "manage-topbar" : ""}`}>
+        <div className="breadcrumb">مرکز فرماندهی / {active.label}</div>
+        <div className="top-actions">
+          <select className="mobile-nav" value={activeSection} onChange={(event) => navigate(event.target.value as CommandSectionId)} aria-label="انتخاب بخش مرکز فرماندهی">
+            {commandSections.map((section) => <option value={section.id} key={section.id}>{section.label}</option>)}
+          </select>
+          <ThemeToggle />
+          <button type="button" className={`filter data-entry-shortcut ${isManage ? "active" : ""}`} onClick={() => navigate("manage")}>+ ورود داده</button>
+          <button type="button" className="filter">این ماه</button>
+          <button type="button" className="filter">همهٔ شهرستان‌ها</button>
+          <div className="governor-profile" aria-label="پروفایل استاندار سمنان">
+            <span className="avatar">م‌ک</span>
+            <span><strong>محمدجواد کولیوند</strong><small>استاندار سمنان</small></span>
           </div>
-        </header>
+        </div>
+      </header>
+      {!isManage ? <>
         <div className="heading">
           <div>
             <p>مرکز پایش و تصمیم‌سازی استاندار سمنان</p>
