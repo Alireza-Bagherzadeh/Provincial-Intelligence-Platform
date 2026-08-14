@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { formatPersianIndex } from "../../lib/persian-numbers";
 import { AiracLogo } from "./airac-logo";
 import { publicServices } from "./data";
 import { Icon } from "./icons";
@@ -10,7 +11,7 @@ export function ServicesFooter() {
         <div className="services-intro"><span className="kicker">درگاه‌های یکپارچه</span><h2>خدمات هوشمند،<br/>برای همه استان</h2><p>مسیرهای روشن و مستقیم برای دسترسی شهروندان، سرمایه‌گذاران و مدیران به خدمات و اطلاعات معتبر.</p></div>
         <div className="services-list">
           {publicServices.map((service, index) => <a className="service-row" href="#services" key={service.title}>
-            <span className="service-number">۰{index + 1}</span><span className="service-icon"><Icon name={service.icon} /></span><span><b>{service.title}</b><small>{service.text}</small></span><Icon name="arrow" />
+            <span className="service-number">{formatPersianIndex(index + 1)}</span><span className="service-icon"><Icon name={service.icon} /></span><span><b>{service.title}</b><small>{service.text}</small></span><Icon name="arrow" />
           </a>)}
         </div>
       </div>
@@ -29,4 +30,3 @@ export function ServicesFooter() {
     </footer>
   </>;
 }
-

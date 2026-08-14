@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { formatPersianIndex, formatPersianNumber } from "../../lib/persian-numbers";
 import { AiracLogo } from "./airac-logo";
 import { landmarkSlides } from "./data";
 import { Icon } from "./icons";
@@ -10,19 +11,21 @@ export function LandmarkHero() {
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
   const [interacting, setInteracting] = useState(false);
+  const [autoplayCycle, setAutoplayCycle] = useState(0);
   const touchStart = useRef<number | null>(null);
   const total = landmarkSlides.length;
-  const go = useCallback((direction: number) => {
+  const go = useCallback((direction: number, manual = false) => {
     setActive((current) => (current + direction + total) % total);
+    if (manual) setAutoplayCycle((current) => current + 1);
   }, [total]);
-  const goToPrevious = useCallback(() => go(-1), [go]);
-  const goToNext = useCallback(() => go(1), [go]);
+  const goToPrevious = useCallback(() => go(-1, true), [go]);
+  const goToNext = useCallback(() => go(1, true), [go]);
 
   useEffect(() => {
     if (paused || interacting || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const timer = window.setInterval(goToNext, 6500);
+    const timer = window.setInterval(() => go(1), 5500);
     return () => window.clearInterval(timer);
-  }, [active, paused, interacting, goToNext]);
+  }, [active, autoplayCycle, paused, interacting, go]);
 
   return <section
     className="landmark-hero"
@@ -36,12 +39,12 @@ export function LandmarkHero() {
     onTouchEnd={(event) => {
       if (touchStart.current === null) return;
       const distance = (event.changedTouches[0]?.clientX ?? touchStart.current) - touchStart.current;
-      if (Math.abs(distance) > 45) go(distance > 0 ? 1 : -1);
+      if (Math.abs(distance) > 45) go(distance > 0 ? 1 : -1, true);
       touchStart.current = null;
     }}
     onKeyDown={(event) => {
-      if (event.key === "ArrowLeft") go(1);
-      if (event.key === "ArrowRight") go(-1);
+      if (event.key === "ArrowLeft") go(1, true);
+      if (event.key === "ArrowRight") go(-1, true);
     }}
     tabIndex={0}
   >
@@ -68,14 +71,13 @@ export function LandmarkHero() {
       </div>
       <div className="hero-controls">
         <button className="hero-previous" type="button" onClick={goToPrevious} aria-label="اسلاید قبلی"><Icon name="arrow" /></button>
-        <div className="hero-progress" aria-label={`اسلاید ${active + 1} از ${total}`}>
-          {landmarkSlides.map((slide, index) => <button key={slide.src} className={active === index ? "active" : ""} onClick={() => setActive(index)} aria-label={`نمایش ${slide.title}`}><i /></button>)}
+        <div className="hero-progress" aria-label={`اسلاید ${formatPersianNumber(active + 1)} از ${formatPersianNumber(total)}`}>
+          {landmarkSlides.map((slide, index) => <button key={slide.src} type="button" className={active === index ? "active" : ""} onClick={() => { setActive(index); setAutoplayCycle((current) => current + 1); }} aria-label={`نمایش ${slide.title}`}><i /></button>)}
         </div>
         <button className="hero-next" type="button" onClick={goToNext} aria-label="اسلاید بعدی"><Icon name="chevron" /></button>
         <button type="button" onClick={() => setPaused((value) => !value)} aria-label={paused ? "پخش خودکار" : "توقف پخش خودکار"} aria-pressed={paused}><Icon name={paused ? "play" : "pause"} /></button>
       </div>
     </div>
-    <div className="hero-index"><b>{String(active + 1).padStart(2, "0")}</b><span>/ {String(total).padStart(2, "0")}</span></div>
+    <div className="hero-index"><b>{formatPersianIndex(active + 1)}</b><span>/ {formatPersianIndex(total)}</span></div>
   </section>;
 }
-

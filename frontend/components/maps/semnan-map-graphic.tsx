@@ -1,6 +1,7 @@
 "use client";
 
 import { provinceGeometry } from "../../dashboard/features/gis/data/province-geometry";
+import { formatPersianNumber } from "../../lib/persian-numbers";
 
 export type MapCounty = {
   code: string;
@@ -64,7 +65,7 @@ export function SemnanMapGraphic({
             <path className={classNames} d={geometry.path} />
             <text className="county-label" x={geometry.labelX} y={geometry.labelY}>{geometry.label}</text>
             {showProgress && county?.projectCount ? (
-              <text className="county-value" x={geometry.labelX} y={geometry.labelY + 25}>{Math.round(county.averageProgress)}٪</text>
+              <text className="county-value" x={geometry.labelX} y={geometry.labelY + 25}>{formatPersianNumber(Math.round(county.averageProgress))}٪</text>
             ) : null}
           </g>
         );
@@ -72,4 +73,3 @@ export function SemnanMapGraphic({
     </svg>
   );
 }
-

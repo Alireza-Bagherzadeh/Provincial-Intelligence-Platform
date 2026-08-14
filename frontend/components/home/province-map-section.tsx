@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { formatPersianIndex, formatPersianNumber } from "../../lib/persian-numbers";
 import { SemnanMapGraphic } from "../maps/semnan-map-graphic";
 import { publicCounties } from "./data";
 import { Icon } from "./icons";
@@ -25,12 +26,12 @@ export function ProvinceMapSection() {
           </div>
         </div>
         <aside className="county-insight" aria-live="polite">
-          <span className="county-number">۰{publicCounties.findIndex((county) => county.code === selectedCode) + 1}</span>
+          <span className="county-number">{formatPersianIndex(publicCounties.findIndex((county) => county.code === selectedCode) + 1)}</span>
           <div><span className="kicker">شهرستان منتخب</span><h3>{selected.name}</h3><p>نمای شهرستانی از پروژه‌های پیشران و وضعیت پیشرفت اجرایی؛ درگاه ورود به اطلاعات دقیق‌تر دستگاه‌ها و بخش‌ها.</p></div>
           <dl>
-            <div><dt>پروژه فعال</dt><dd>{selected.projectCount}</dd></div>
-            <div><dt>پیشرفت میانگین</dt><dd>{Math.round(selected.averageProgress)}٪</dd></div>
-            <div><dt>نیازمند توجه</dt><dd>{selected.criticalProjectCount}</dd></div>
+            <div><dt>پروژه فعال</dt><dd>{formatPersianNumber(selected.projectCount)}</dd></div>
+            <div><dt>پیشرفت میانگین</dt><dd>{formatPersianNumber(Math.round(selected.averageProgress))}٪</dd></div>
+            <div><dt>نیازمند توجه</dt><dd>{formatPersianNumber(selected.criticalProjectCount)}</dd></div>
           </dl>
           <div className="county-progress"><span style={{ width: `${selected.averageProgress}%` }} /></div>
           <a className="text-link" href="#projects">مشاهده پروژه‌های شهرستان <Icon name="arrow" /></a>
@@ -38,11 +39,10 @@ export function ProvinceMapSection() {
       </div>
       <div className="province-facts">
         <div><b>۸</b><span>شهرستان در شبکه استان</span></div>
-        <div><b>{totalProjects}</b><span>پروژه پیشران در حال پایش</span></div>
+        <div><b>{formatPersianNumber(totalProjects)}</b><span>پروژه پیشران در حال پایش</span></div>
         <div><b>۹۷٪</b><span>پوشش داده شهرستانی</span></div>
         <div><b>۲۴/۷</b><span>رصد شاخص‌های اجرایی</span></div>
       </div>
     </div>
   </section>;
 }
-

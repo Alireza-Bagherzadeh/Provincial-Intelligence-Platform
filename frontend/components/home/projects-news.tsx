@@ -1,5 +1,6 @@
 import Image from "next/image";
 import type { PublicData } from "../../lib/public-data";
+import { formatPersianIndex, formatPersianNumber, toPersianDigits } from "../../lib/persian-numbers";
 import { Icon } from "./icons";
 
 const fallbackProjects = [
@@ -33,9 +34,9 @@ export function ProjectsNews({ data }: { data: PublicData }) {
           {projects.map((project, index) => {
             const progress = Math.max(0, Math.min(100, parseLocalizedNumber(project.actualProgress) || 0));
             return <article className="project-row" key={`${project.title}-${index}`}>
-              <span className="project-index">۰{index + 1}</span>
-              <div className="project-title"><span>{project.county?.name ?? "استان سمنان"}</span><h3>{project.title}</h3></div>
-              <div className="project-progress"><div><span>پیشرفت اجرایی</span><b>{progress}٪</b></div><i><em style={{ width: `${progress}%` }} /></i></div>
+              <span className="project-index">{formatPersianIndex(index + 1)}</span>
+              <div className="project-title"><span>{toPersianDigits(project.county?.name ?? "استان سمنان")}</span><h3>{toPersianDigits(project.title)}</h3></div>
+              <div className="project-progress"><div><span>پیشرفت اجرایی</span><b>{formatPersianNumber(progress)}٪</b></div><i><em style={{ width: `${progress}%` }} /></i></div>
               <span className={`project-status ${project.status}`}>{project.status === "critical" ? "نیازمند اقدام" : project.status === "attention" ? "در حال پیگیری" : "طبق برنامه"}</span>
               <button className="round-link" aria-label={`مشاهده ${project.title}`}><Icon name="arrow" /></button>
             </article>;
@@ -49,7 +50,7 @@ export function ProjectsNews({ data }: { data: PublicData }) {
         <div className="news-grid">
           {news.map((item, index) => <article className={`news-card ${index === 0 ? "featured" : ""}`} key={item.id}>
             <div className="news-image"><Image src={newsImages[index]} alt="" fill sizes={index === 0 ? "(max-width: 900px) 100vw, 55vw" : "(max-width: 900px) 100vw, 25vw"} /></div>
-            <div className="news-copy"><div><span>{item.category}</span><span><Icon name="calendar" /> ۲۲ مرداد ۱۴۰۵</span></div><h3>{item.title}</h3><p>{item.summary}</p><a aria-label={`مطالعه ${item.title}`} href="#news"><Icon name="arrow" /></a></div>
+            <div className="news-copy"><div><span>{toPersianDigits(item.category)}</span><span><Icon name="calendar" /> ۲۲ مرداد ۱۴۰۵</span></div><h3>{toPersianDigits(item.title)}</h3><p>{toPersianDigits(item.summary)}</p><a aria-label={`مطالعه ${toPersianDigits(item.title)}`} href="#news"><Icon name="arrow" /></a></div>
           </article>)}
         </div>
       </div>

@@ -1,4 +1,5 @@
 import type { PublicData } from "../../lib/public-data";
+import { formatPersianIndex, toPersianDigits } from "../../lib/persian-numbers";
 import { Icon } from "./icons";
 
 const fallbackSectors = [
@@ -26,13 +27,12 @@ export function GovernanceSection({ data }: { data: PublicData }) {
         </article>
         <div className="sector-grid">
           {sectors.map((sector, index) => <article key={sector.domain} className={`sector-card status-${sector.status}`}>
-            <div><span>۰{index + 1}</span><Icon name={index === 0 ? "layers" : index === 1 ? "pulse" : index === 2 ? "building" : "briefcase"} /></div>
-            <h3>{sector.domain}</h3><p>{sector.label}</p>
-            <div className="sector-value"><b>{sector.value}</b><span>امتیاز</span><em>{sector.trendPercent}٪</em></div>
+            <div><span>{formatPersianIndex(index + 1)}</span><Icon name={index === 0 ? "layers" : index === 1 ? "pulse" : index === 2 ? "building" : "briefcase"} /></div>
+            <h3>{toPersianDigits(sector.domain)}</h3><p>{toPersianDigits(sector.label)}</p>
+            <div className="sector-value"><b>{toPersianDigits(sector.value)}</b><span>امتیاز</span><em>{toPersianDigits(sector.trendPercent)}٪</em></div>
           </article>)}
         </div>
       </div>
     </div>
   </section>;
 }
-
