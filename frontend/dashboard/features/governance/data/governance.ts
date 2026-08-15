@@ -3,6 +3,7 @@ export type GovernanceTone = "positive" | "warning" | "critical";
 export const deputies = [
   {
     key: "political",
+    panel: "executive-political",
     name: "مهدی آقابراری",
     role: "معاون سیاسی، امنیتی و اجتماعی",
     note: "روند موالید و پوشش مسائل اجتماعی شهرستان‌ها نیازمند پایش نزدیک است.",
@@ -12,6 +13,7 @@ export const deputies = [
   },
   {
     key: "economic",
+    panel: "executive-economic",
     name: "حمید دهرویّه",
     role: "معاون هماهنگی امور اقتصادی",
     note: "احیای ۲۳ واحد راکد و مسیر توسعه انرژی خورشیدی در وضعیت پیگیری فعال است.",
@@ -21,6 +23,7 @@ export const deputies = [
   },
   {
     key: "civil",
+    panel: "executive-civil",
     name: "فرج‌الله ایلیات",
     role: "معاون هماهنگی امور عمرانی",
     note: "پایش آزادراه حرم تا حرم و طرح‌های آب و فاضلاب در اولویت اجرایی قرار دارد.",
@@ -30,6 +33,7 @@ export const deputies = [
   },
   {
     key: "management",
+    panel: "executive-resources",
     name: "رضا عبدالله‌زاده",
     role: "معاون توسعه مدیریت و منابع",
     note: "یکپارچگی داده دستگاه‌ها و کیفیت پوشش شهرستانی در حال بهبود است.",

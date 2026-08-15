@@ -3,6 +3,7 @@
 import { ChangeEvent, FormEvent, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ContentStudio } from "./content-studio";
+import { DataFlowHub } from "../../data-governance/components/data-flow-hub";
 
 type Option = { value: string; label: string };
 type Lookups = { counties: Option[]; organizations: Option[] };
@@ -116,14 +117,14 @@ const resources: ResourceConfig[] = [
     ]
   },
   {
-    id: "performance", label: "KPI عملکرد", description: "شاخص‌های ارزیابی دستگاه‌های اجرایی", titleField: "label", subtitleFields: ["category", "period_label"],
+    id: "performance", label: "شاخص عملکرد", description: "شاخص‌های ارزیابی دستگاه‌های اجرایی", titleField: "label", subtitleFields: ["category", "period_label"],
     fields: [
       { name: "organization_id", label: "دستگاه اجرایی", type: "select", lookup: "organizations", required: true },
       { name: "category", label: "حوزه ارزیابی", required: true },
-      { name: "label", label: "عنوان KPI", required: true, wide: true },
+      { name: "label", label: "عنوان شاخص عملکرد", required: true, wide: true },
       { name: "score", label: "امتیاز", type: "number", min: 0, max: 100, step: 0.1, required: true },
       { name: "target", label: "هدف", type: "number", min: 0, max: 100, step: 0.1, required: true },
-      { name: "period_label", label: "دوره", required: true, placeholder: "مرداد 1405" },
+      { name: "period_label", label: "دوره", required: true, placeholder: "مرداد ۱۴۰۵" },
       { name: "weight", label: "وزن", type: "number", min: 0, step: 0.1, required: true }
     ]
   },
@@ -137,7 +138,7 @@ const resources: ResourceConfig[] = [
       { name: "unit", label: "واحد" },
       { name: "period_label", label: "دوره", required: true },
       { name: "trend_percent", label: "تغییر (%)", type: "number", step: 0.01 },
-      { name: "benchmark_value", label: "Benchmark", type: "number", step: 0.01 },
+      { name: "benchmark_value", label: "معیار مرجع", type: "number", step: 0.01 },
       { name: "status", label: "وضعیت", type: "select", options: statusHealth, required: true },
       { name: "county_id", label: "شهرستان", type: "select", lookup: "counties", options: [{ value: "", label: "کل استان" }] },
       { name: "description", label: "توضیح", type: "textarea", wide: true }
@@ -394,7 +395,7 @@ export function DataEntryPanel() {
   }
 
   if (!structuredMode) {
-    return <ContentStudio />;
+    return <section className="data-management-home"><DataFlowHub /><div className="data-management-switch"><div><span>اطلاعات ساختاریافته</span><b>پروژه‌ها، مصوبات، بودجه، شاخص‌ها و گزارش‌ها</b></div><button type="button" onClick={() => setStructuredMode(true)}>ورود به مدیریت رکوردها ←</button></div><ContentStudio /></section>;
   }
 
   if (!resource) return null;
@@ -402,11 +403,11 @@ export function DataEntryPanel() {
   return <section className="structured-data-page">
     <header className="structured-data-head">
       <div>
-        <span>STRUCTURED DATA</span>
+        <span>داده‌های ساختاریافته</span>
         <h2>مدیریت داده‌های ساختاریافته</h2>
-        <p>پروژه، بودجه، KPI، بحران، پیش‌بینی و سایر داده‌های عملیاتی استان</p>
+        <p>پروژه، بودجه، شاخص عملکرد، بحران، پیش‌بینی و سایر داده‌های عملیاتی استان</p>
       </div>
-      <button type="button" onClick={() => setStructuredMode(false)}>بازگشت به کتابخانه محتوا</button>
+      <button type="button" onClick={() => setStructuredMode(false)}>بازگشت به مدیریت داده</button>
     </header>
 
     <div className="structured-resource-tabs" role="tablist" aria-label="نوع داده">
@@ -425,7 +426,7 @@ export function DataEntryPanel() {
     <div className="crud-layout structured-crud-layout">
       <article className="card crud-form-card">
         <header className="crud-card-head">
-          <div><span className="section-kicker">{editingId ? "EDIT RECORD" : "NEW RECORD"}</span><h3>{editingId ? `ویرایش ${resource.label}` : `افزودن ${resource.label}`}</h3><p>{resource.description}</p></div>
+          <div><span className="section-kicker">{editingId ? "ویرایش رکورد" : "رکورد جدید"}</span><h3>{editingId ? `ویرایش ${resource.label}` : `افزودن ${resource.label}`}</h3><p>{resource.description}</p></div>
           {editingId ? <button type="button" className="ghost-action" onClick={resetForm}>لغو ویرایش</button> : null}
         </header>
 

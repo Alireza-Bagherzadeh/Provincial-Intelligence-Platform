@@ -18,9 +18,9 @@ export function ProvinceMapPreview() {
   const [selected, setSelected] = useState("سمنان");
   const snapshot = snapshots[selected];
   return <section className="province-card" aria-label="پیش‌نمایش شهرستان‌های استان">
-    <div className="map-card-head"><div><span>نبض استان</span><h2>نقشه هوشمند استان</h2></div><b>{snapshot.score}<small>/100 امتیاز</small></b></div>
+    <div className="map-card-head"><div><span>نبض استان</span><h2>نقشه هوشمند استان</h2></div><b>{snapshot.score.toLocaleString("fa-IR")}<small>/۱۰۰ امتیاز</small></b></div>
     <div className="mini-map"><div className="map-orbit orbit-one" /><div className="map-orbit orbit-two" /><span className="map-label">{selected}</span><div className="map-focus"><small>محور شاخص</small><strong>{snapshot.focus}</strong></div></div>
     <div className="county-pills">{counties.map((county) => <button type="button" key={county} className={selected === county ? "active" : ""} onClick={() => setSelected(county)}>{county}</button>)}</div>
-    <p className="map-disclaimer">نمای فعلی یک Preview تعاملی است؛ مرز GIS واقعی در فاز اتصال GeoJSON/PostGIS جایگزین می‌شود.</p>
+    <p className="map-disclaimer">این نمای تعاملی، وضعیت شاخص‌های منتخب هر شهرستان را به‌صورت یکپارچه نمایش می‌دهد.</p>
   </section>;
 }

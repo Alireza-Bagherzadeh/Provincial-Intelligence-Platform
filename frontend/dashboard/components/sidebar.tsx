@@ -3,12 +3,21 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import img from "../assets/logowhite.png";
+import type { ExecutiveWorkspaceId } from "../features/executive/data/executive-workspaces";
 
 export const commandSections = [
   { id: "overview", label: "نمای کلی", group: "فرماندهی" },
   { id: "monitoring", label: "رصد استان", group: "فرماندهی" },
   { id: "map", label: "نقشه هوشمند", group: "فرماندهی" },
   { id: "benchmark", label: "مقایسه شهرستان‌ها", group: "فرماندهی" },
+  { id: "county-profile", label: "پرونده شهرستان منتخب", group: "فرماندهی" },
+
+  { id: "executive-governor", label: "محمدجواد کولیوند | استاندار", group: "پنل اختصاصی مدیران" },
+  { id: "governor-minutes", label: "صورت‌جلسات و گزارش چاپی", group: "پنل اختصاصی مدیران" },
+  { id: "executive-civil", label: "فرج‌الله ایلیات | عمرانی", group: "پنل اختصاصی مدیران" },
+  { id: "executive-economic", label: "حمید دهرویه | اقتصادی", group: "پنل اختصاصی مدیران" },
+  { id: "executive-political", label: "مهدی آقابراری | سیاسی و اجتماعی", group: "پنل اختصاصی مدیران" },
+  { id: "executive-resources", label: "رضا عبدالله‌زاده | توسعه مدیریت", group: "پنل اختصاصی مدیران" },
 
   { id: "projects", label: "پروژه‌ها", group: "عملیات" },
   { id: "counties", label: "شهرستان‌ها", group: "عملیات" },
@@ -18,9 +27,9 @@ export const commandSections = [
   { id: "finance", label: "بودجه و سرمایه‌گذاری", group: "عملیات" },
   { id: "procurement", label: "مناقصات و خرید", group: "عملیات" },
 
-  { id: "sectors", label: "هوشمندی بخشی", group: "هوشمندی" },
-  { id: "news", label: "هوشمندی خبر", group: "هوشمندی" },
-  { id: "speech", label: "هوشمندی سخنان", group: "هوشمندی" },
+  { id: "sectors", label: "بخش‌بندی هوشمند", group: "هوشمندی" },
+  { id: "news", label: "خبرگزاری هوشمند", group: "هوشمندی" },
+  { id: "speech", label: "نکات کلیدی در سخنان", group: "هوشمندی" },
   { id: "citizen", label: "صدای مردم", group: "هوشمندی" },
   { id: "alerts", label: "هشدارها", group: "هوشمندی" },
   { id: "crisis", label: "بحران و تاب‌آوری", group: "هوشمندی" },
@@ -30,25 +39,67 @@ export const commandSections = [
     group: "هوشمندی",
   },
 
-  { id: "reports", label: "گزارش‌ها", group: "داده و AI" },
-  { id: "manage", label: "مدیریت داده", group: "داده و AI" },
-  { id: "ai", label: "دستیار هوشمند", group: "داده و AI" },
+  { id: "reports", label: "گزارش‌ها", group: "داده و هوش مصنوعی" },
+  { id: "manage", label: "مدیریت داده", group: "داده و هوش مصنوعی" },
+  { id: "ai", label: "دستیار هوشمند", group: "داده و هوش مصنوعی" },
+
+  { id: "role-reports", label: "گزارش‌های حوزه من", group: "فضای کاری من" },
+  { id: "role-decisions", label: "مصوبات حوزه من", group: "فضای کاری من" },
 ] as const;
 
 export type CommandSectionId =
   (typeof commandSections)[number]["id"];
 
+type VisibleCommandSection = {
+  id: CommandSectionId;
+  label: string;
+  group: string;
+};
+
+const roleOnlySections: CommandSectionId[] = ["role-reports", "role-decisions"];
+
+export function allowedCommandSectionIds(workspaceId: ExecutiveWorkspaceId) {
+  if (workspaceId === "executive-governor") {
+    return commandSections.map((section) => section.id);
+  }
+
+  return [workspaceId, ...roleOnlySections, "ai"] as CommandSectionId[];
+}
+
+export function visibleCommandSections(workspaceId: ExecutiveWorkspaceId): VisibleCommandSection[] {
+  if (workspaceId === "executive-governor") {
+    return commandSections
+      .filter((section) => !roleOnlySections.includes(section.id))
+      .map((section) => ({
+        ...section,
+        group: section.group === "پنل اختصاصی مدیران" ? "نظارت عالی مدیران" : section.group,
+      }));
+  }
+
+  return commandSections
+    .filter((section) => section.id === workspaceId || roleOnlySections.includes(section.id) || section.id === "ai")
+    .map((section) => ({
+      ...section,
+      label: section.id === workspaceId ? "داشبورد اختصاصی من" : section.label,
+      group: section.id === "ai" ? "دستیار همراه" : "فضای کاری من",
+    }));
+}
+
 export function Sidebar({
   activeSection,
   onSelect,
+  workspaceId,
 }: {
   activeSection: CommandSectionId;
   onSelect: (section: CommandSectionId) => void;
+  workspaceId: ExecutiveWorkspaceId;
 }) {
   const [mobileOpen, setMobileOpen] = useState(false);
 
+  const visibleSections = visibleCommandSections(workspaceId);
+
   const groups = [
-    ...new Set(commandSections.map((section) => section.group)),
+    ...new Set(visibleSections.map((section) => section.group)),
   ];
 
   useEffect(() => {
@@ -121,7 +172,7 @@ export function Sidebar({
             <div className="nav-group" key={group}>
               <small>{group}</small>
 
-              {commandSections
+              {visibleSections
                 .filter(
                   (section) =>
                     section.group === group

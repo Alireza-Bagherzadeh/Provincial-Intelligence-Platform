@@ -75,8 +75,8 @@ const emptyForm = {
 
 
 function mockCover(seed: string, accent = "35b9c8") {
-  const safe = seed.replace(/[<>&"']/g, "").slice(0, 18);
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="960" height="600" viewBox="0 0 960 600"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#071923"/><stop offset="1" stop-color="#${accent}"/></linearGradient></defs><rect width="960" height="600" fill="url(#g)"/><circle cx="760" cy="150" r="110" fill="#fff" opacity=".12"/><path d="M0 470 185 305 330 405 510 205 710 390 960 245V600H0Z" fill="#fff" opacity=".18"/><path d="M0 520 250 395 430 470 650 325 960 455V600H0Z" fill="#02090d" opacity=".42"/><text x="54" y="82" fill="#fff" opacity=".82" font-family="Arial" font-size="30">SEMNAN • ${safe}</text></svg>`;
+  void seed;
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="960" height="600" viewBox="0 0 960 600"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#071923"/><stop offset="1" stop-color="#${accent}"/></linearGradient></defs><rect width="960" height="600" fill="url(#g)"/><circle cx="760" cy="150" r="110" fill="#fff" opacity=".12"/><path d="M0 470 185 305 330 405 510 205 710 390 960 245V600H0Z" fill="#fff" opacity=".18"/><path d="M0 520 250 395 430 470 650 325 960 455V600H0Z" fill="#02090d" opacity=".42"/></svg>`;
   return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
 }
 
@@ -482,7 +482,7 @@ export function ContentStudio({ onOpenStructured }: ContentStudioProps) {
 
     <div className="studio-workspace">
       <section className="studio-preview-panel">
-        <div className="studio-panel-title"><div><span>پیش‌نمایش محتوا</span><small>CONTENT PREVIEW</small></div></div>
+        <div className="studio-panel-title"><div><span>پیش‌نمایش محتوا</span><small>نمای کامل محتوای انتخاب‌شده</small></div></div>
         {!selected ? <div className="studio-empty"><Icon name="file" size={26}/><b>{loading ? "در حال دریافت محتوا..." : "محتوایی برای نمایش وجود ندارد"}</b></div> : <>
           <div className={`studio-preview-hero ${selectedCover ? "with-image" : "text-only"}`}>
             {selectedCover ? <div className="studio-preview-media"><SafeImage src={selectedCover} alt={selected.title || "تصویر محتوا"} className="studio-preview-image" /></div> : null}
@@ -516,7 +516,7 @@ export function ContentStudio({ onOpenStructured }: ContentStudioProps) {
       </section>
     </div>
 
-    {editorOpen ? <div className="studio-modal-backdrop" onMouseDown={() => { setEditorOpen(false); setEditing(null); }}><div className="studio-modal studio-editor" onMouseDown={(event) => event.stopPropagation()}><header><div><span>{editing ? "EDIT CONTENT" : "NEW CONTENT"}</span><h2>{editing ? "ویرایش محتوا" : "افزودن محتوا"}</h2></div><button type="button" onClick={() => { setEditorOpen(false); setEditing(null); }}><Icon name="close" size={18}/></button></header><form className="studio-editor-form" onSubmit={save}>
+    {editorOpen ? <div className="studio-modal-backdrop" onMouseDown={() => { setEditorOpen(false); setEditing(null); }}><div className="studio-modal studio-editor" onMouseDown={(event) => event.stopPropagation()}><header><div><span>{editing ? "ویرایش محتوا" : "محتوای جدید"}</span><h2>{editing ? "ویرایش محتوا" : "افزودن محتوا"}</h2></div><button type="button" onClick={() => { setEditorOpen(false); setEditing(null); }}><Icon name="close" size={18}/></button></header><form className="studio-editor-form" onSubmit={save}>
       <label className="wide"><span>عنوان</span><input required value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} /></label>
       <label><span>نوع محتوا</span><select value={form.kind} onChange={(e) => setForm({ ...form, kind: e.target.value })}>{kindFilters.filter((item) => item.value !== "all").map((item) => <option value={item.value} key={item.value}>{item.label}</option>)}</select></label>
       <label><span>موضوع</span><input value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} /></label>

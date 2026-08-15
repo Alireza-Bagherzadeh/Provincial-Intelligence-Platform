@@ -43,7 +43,7 @@ const fallbackData: Omit<CommandCenterData, "endpoint" | "connectionMessage"> = 
   brief: [
     { kind: "crisis", title: "تنش آبی شرق استان بالاترین سیگنال تاب‌آوری را دارد.", detail: "شدت اثر ۸۸ از ۱۰۰ است و پیگیری اقدامات آب، هواشناسی و پروژه‌های مرتبط در اولویت قرار دارد.", actionLabel: "مرکز بحران", isDemo: true },
     { kind: "forecast", title: "برآورد تنش آبی در افق ۳۰ روز نزولی است.", detail: "شاخص از ۵۸ به ۵۱ می‌رسد و دامنه تغییرات نیز در تحلیل لحاظ شده است.", actionLabel: "هشدار زودهنگام", isDemo: true },
-    { kind: "sector", title: "ریسک آب و محیط‌زیست در بالاترین سطح توجه است.", detail: "روندهای زمانی و وضعیت شهرستان‌ها ضرورت اقدام هماهنگ را نشان می‌دهند.", actionLabel: "هوشمندی بخشی", isDemo: true },
+    { kind: "sector", title: "ریسک آب و محیط‌زیست در بالاترین سطح توجه است.", detail: "روندهای زمانی و وضعیت شهرستان‌ها ضرورت اقدام هماهنگ را نشان می‌دهند.", actionLabel: "بخش‌بندی هوشمند", isDemo: true },
     { kind: "risk", title: "دو پروژه از برنامه عقب هستند.", detail: "انحراف برنامه و عملکرد به مرکز هشدار و خلاصه اجرایی متصل شده است.", actionLabel: "مرکز پروژه‌ها", isDemo: true }
   ],
   counties: demoCounties,
@@ -81,7 +81,7 @@ const fallbackData: Omit<CommandCenterData, "endpoint" | "connectionMessage"> = 
   ],
   reports: [
     { title: "گزارش صبحگاهی استان", reportType: "morning_brief", periodLabel: "امروز", status: "ready", isDemo: true, organization: { name: "استانداری سمنان" } },
-    { title: "گزارش هوشمندی خبر و افکار عمومی", reportType: "news_intelligence", periodLabel: "۷ روز اخیر", status: "ready", isDemo: true, organization: { name: "اداره کل ارتباطات و فناوری اطلاعات" } }
+    { title: "گزارش خبرگزاری هوشمند و افکار عمومی", reportType: "news_intelligence", periodLabel: "۷ روز اخیر", status: "ready", isDemo: true, organization: { name: "اداره کل ارتباطات و فناوری اطلاعات" } }
   ],
   newsArticles: fallbackNews,
   sectorIndicators: fallbackSectors,
@@ -92,7 +92,13 @@ const fallbackData: Omit<CommandCenterData, "endpoint" | "connectionMessage"> = 
   ],
   speechInsights: [
     { id: "sp1", speaker: "محمدجواد کولیوند", role: "استاندار سمنان", spokenAt: "2026-08-10", topic: "آب", summary: "تبدیل مسئله کمبود آب به برنامه قابل سنجش و شهرستان‌محور.", commitmentText: "گزارش هفتگی ریسک آب و پیشرفت اقدامات آماده شود.", commitmentStatus: "at_risk", county: { name: "سمنان" }, sourceUrl: "", isDemo: true },
-    { id: "sp2", speaker: "محمدجواد کولیوند", role: "استاندار سمنان", spokenAt: "2026-08-02", topic: "سرمایه‌گذاری", summary: "تمرکز بر رفع موانع و کوتاه شدن زمان تبدیل فرصت به پروژه.", commitmentText: "بسته موانع سرمایه‌گذاری با مسئول و موعد مشخص پیگیری شود.", commitmentStatus: "in_progress", county: { name: "گرمسار" }, sourceUrl: "", isDemo: true }
+    { id: "sp2", speaker: "محمدجواد کولیوند", role: "استاندار سمنان", spokenAt: "2026-08-02", topic: "سرمایه‌گذاری", summary: "تمرکز بر رفع موانع و کوتاه شدن زمان تبدیل فرصت به پروژه.", commitmentText: "بسته موانع سرمایه‌گذاری با مسئول و موعد مشخص پیگیری شود.", commitmentStatus: "in_progress", county: { name: "گرمسار" }, sourceUrl: "", isDemo: true },
+    { id: "sp3", speaker: "محمدجواد کولیوند", role: "استاندار سمنان", spokenAt: "2026-07-28", topic: "پروژه‌های عمرانی", summary: "پروژه‌های نیمه‌تمام باید بر پایه اثرگذاری، پیشرفت و نیاز شهرستان اولویت‌بندی شوند.", commitmentText: "فهرست پروژه‌های اولویت‌دار هر شهرستان با زمان‌بندی تکمیل ارائه شود.", commitmentStatus: "in_progress", county: { name: "شاهرود" }, sourceUrl: "", isDemo: true },
+    { id: "sp4", speaker: "محمدجواد کولیوند", role: "استاندار سمنان", spokenAt: "2026-07-22", topic: "اشتغال", summary: "پیوند آموزش مهارتی با نیاز واقعی صنایع، محور اصلی افزایش اشتغال پایدار است.", commitmentText: "ظرفیت‌های استخدامی صنایع و برنامه مهارت‌آموزی شهرستان‌ها تطبیق داده شود.", commitmentStatus: "open", county: { name: "دامغان" }, sourceUrl: "", isDemo: true },
+    { id: "sp5", speaker: "محمدجواد کولیوند", role: "استاندار سمنان", spokenAt: "2026-07-15", topic: "انرژی خورشیدی", summary: "توسعه نیروگاه‌های خورشیدی کوچک‌مقیاس باید با مشارکت بخش خصوصی شتاب بگیرد.", commitmentText: "زمین‌های مستعد و مجوزهای معطل طرح‌های خورشیدی تعیین تکلیف شوند.", commitmentStatus: "completed", county: { name: "آرادان" }, sourceUrl: "", isDemo: true },
+    { id: "sp6", speaker: "فرج‌الله ایلیات", role: "معاون هماهنگی امور عمرانی", spokenAt: "2026-07-09", topic: "ایمنی راه", summary: "کاهش نقاط حادثه‌خیز و ایمن‌سازی محورهای پرتردد باید با گزارش ماهانه سنجیده شود.", commitmentText: "سه نقطه پرخطر در اولویت اصلاح فوری قرار گیرد.", commitmentStatus: "at_risk", county: { name: "میامی" }, sourceUrl: "", isDemo: true },
+    { id: "sp7", speaker: "حمید دهرویه", role: "معاون هماهنگی امور اقتصادی", spokenAt: "2026-07-03", topic: "تولید", summary: "رفع موانع واحدهای تولیدی باید نتیجه‌محور و همراه با اعلام اثر بر ظرفیت تولید باشد.", commitmentText: "مصوبات کارگروه تسهیل تا حصول نتیجه در هر شهرستان پیگیری شود.", commitmentStatus: "in_progress", county: { name: "گرمسار" }, sourceUrl: "", isDemo: true },
+    { id: "sp8", speaker: "مهدی آقابراری", role: "معاون سیاسی، امنیتی و اجتماعی", spokenAt: "2026-06-27", topic: "پاسخ‌گویی", summary: "رضایت عمومی با پاسخ روشن، به‌موقع و قابل پیگیری دستگاه‌های اجرایی افزایش می‌یابد.", commitmentText: "گزارش درخواست‌های بدون پاسخ دستگاه‌ها هفتگی ارائه شود.", commitmentStatus: "completed", county: { name: "سمنان" }, sourceUrl: "", isDemo: true }
   ],
   performanceIndicators: [
     { id: "k1", category: "اثربخشی", label: "تحقق برنامه", score: "66", target: "85", periodLabel: "مرداد ۱۴۰۵", weight: "1", organization: { name: "دستگاه نمونه آب و زیرساخت", code: "demo-infra" }, isDemo: true },
@@ -107,11 +113,11 @@ const fallbackData: Omit<CommandCenterData, "endpoint" | "connectionMessage"> = 
     { id: "c4", title: "اختلال خدمات عمومی", category: "خدمات", severity: "medium", status: "resolved", occurredAt: "2026-08-06", impactScore: 42, summary: "رسیدگی انجام شده و چرخه رخداد با ثبت نتیجه خاتمه یافته است.", sourceLabel: "مرکز تاب‌آوری استان", county: { name: "سمنان" }, isDemo: true }
   ],
   forecastSignals: [
-    { id: "f1", domain: "آب", metricLabel: "شاخص تنش آبی", asOf: "2026-08-10", horizonLabel: "۳۰ روز", currentValue: "58", forecastValue: "51", lowerBound: "47", upperBound: "56", unit: "امتیاز", riskLevel: "critical", confidence: 72, methodology: "Trend + scenario demo", county: { name: "شاهرود" }, isDemo: true },
-    { id: "f2", domain: "انرژی", metricLabel: "تاب‌آوری تامین انرژی", asOf: "2026-08-10", horizonLabel: "۳۰ روز", currentValue: "74", forecastValue: "69", lowerBound: "65", upperBound: "75", unit: "امتیاز", riskLevel: "attention", confidence: 68, methodology: "Trend + scenario demo", county: { name: "گرمسار" }, isDemo: true },
-    { id: "f3", domain: "پروژه", metricLabel: "میانگین پیشرفت پروژه‌های بحرانی", asOf: "2026-08-10", horizonLabel: "۴۵ روز", currentValue: "42", forecastValue: "49", lowerBound: "45", upperBound: "54", unit: "درصد", riskLevel: "attention", confidence: 76, methodology: "Portfolio trend demo", county: null, isDemo: true },
-    { id: "f4", domain: "صدای مردم", metricLabel: "نرخ پاسخ‌گویی", asOf: "2026-08-10", horizonLabel: "۳۰ روز", currentValue: "78", forecastValue: "84", lowerBound: "80", upperBound: "88", unit: "درصد", riskLevel: "healthy", confidence: 81, methodology: "SLA trend demo", county: null, isDemo: true },
-    { id: "f5", domain: "محیط‌زیست", metricLabel: "ریسک خشکسالی/فرونشست", asOf: "2026-08-10", horizonLabel: "۶۰ روز", currentValue: "55", forecastValue: "49", lowerBound: "44", upperBound: "56", unit: "امتیاز", riskLevel: "critical", confidence: 64, methodology: "Remote sensing placeholder", county: null, isDemo: true }
+    { id: "f1", domain: "آب", metricLabel: "شاخص تنش آبی", asOf: "2026-08-10", horizonLabel: "۳۰ روز", currentValue: "58", forecastValue: "51", lowerBound: "47", upperBound: "56", unit: "امتیاز", riskLevel: "critical", confidence: 72, methodology: "تحلیل روند و سناریو", county: { name: "شاهرود" }, isDemo: true },
+    { id: "f2", domain: "انرژی", metricLabel: "تاب‌آوری تامین انرژی", asOf: "2026-08-10", horizonLabel: "۳۰ روز", currentValue: "74", forecastValue: "69", lowerBound: "65", upperBound: "75", unit: "امتیاز", riskLevel: "attention", confidence: 68, methodology: "تحلیل روند و سناریو", county: { name: "گرمسار" }, isDemo: true },
+    { id: "f3", domain: "پروژه", metricLabel: "میانگین پیشرفت پروژه‌های بحرانی", asOf: "2026-08-10", horizonLabel: "۴۵ روز", currentValue: "42", forecastValue: "49", lowerBound: "45", upperBound: "54", unit: "درصد", riskLevel: "attention", confidence: 76, methodology: "تحلیل روند سبد پروژه", county: null, isDemo: true },
+    { id: "f4", domain: "صدای مردم", metricLabel: "نرخ پاسخ‌گویی", asOf: "2026-08-10", horizonLabel: "۳۰ روز", currentValue: "78", forecastValue: "84", lowerBound: "80", upperBound: "88", unit: "درصد", riskLevel: "healthy", confidence: 81, methodology: "تحلیل روند زمان پاسخ", county: null, isDemo: true },
+    { id: "f5", domain: "محیط‌زیست", metricLabel: "ریسک خشکسالی/فرونشست", asOf: "2026-08-10", horizonLabel: "۶۰ روز", currentValue: "55", forecastValue: "49", lowerBound: "44", upperBound: "56", unit: "امتیاز", riskLevel: "critical", confidence: 64, methodology: "تحلیل پایش از دور", county: null, isDemo: true }
   ]
 };
 
@@ -173,7 +179,7 @@ export async function getCommandCenterData(): Promise<CommandCenterData> {
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
     const result = (await response.json()) as GraphQLResponse;
-    if (!result.data?.dashboardSummary) throw new Error(result.errors?.map((error) => error.message).join("، ") || "پاسخ GraphQL فاقد داده است");
+    if (!result.data?.dashboardSummary) throw new Error(result.errors?.map((error) => error.message).join("، ") || "پاسخ سرویس داده فاقد اطلاعات است");
 
     const isPartial = Boolean(result.errors?.length);
     return {
@@ -200,6 +206,6 @@ export async function getCommandCenterData(): Promise<CommandCenterData> {
       connectionMessage: isPartial ? result.errors?.map((error) => error.message).join("، ") : undefined
     };
   } catch (error) {
-    return { ...fallbackData, endpoint, connectionMessage: error instanceof Error ? error.message : "خطای ناشناخته در اتصال GraphQL" };
+    return { ...fallbackData, endpoint, connectionMessage: error instanceof Error ? error.message : "خطای ناشناخته در دریافت داده" };
   }
 }

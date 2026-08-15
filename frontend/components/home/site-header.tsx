@@ -28,14 +28,13 @@ export function SiteHeader() {
       <div className="header-actions">
         <button className="icon-button search-button" type="button" aria-label="جستجو"><Icon name="search" /></button>
         <ThemeToggle />
-        <Link className="command-link" href="/command">ورود به مرکز فرماندهی <Icon name="arrow" /></Link>
+        <Link className="command-link" href="/login">ورود مدیران <Icon name="arrow" /></Link>
         <button className="icon-button menu-button" type="button" aria-expanded={open} aria-controls="mobile-navigation" onClick={() => setOpen((value) => !value)} aria-label={open ? "بستن فهرست" : "باز کردن فهرست"}><Icon name={open ? "close" : "menu"} /></button>
       </div>
     </div>
     <div id="mobile-navigation" className={`mobile-nav ${open ? "open" : ""}`}>
       {navItems.map((item) => <a key={item.href} href={item.href} onClick={() => setOpen(false)}>{item.label}<Icon name="arrow" /></a>)}
-      <Link href="/command">ورود به مرکز فرماندهی <Icon name="arrow" /></Link>
+      <Link href="/login">ورود مدیران <Icon name="arrow" /></Link>
     </div>
   </header>;
 }
-

@@ -14,7 +14,7 @@ export function SectorIntelligencePanel({ data: _data }: { data: CommandCenterDa
   const average = province.reduce((sum, item) => sum + Number(item.value), 0) / province.length;
 
   return <section className="panel-stack">
-    <div className="section-heading"><div><h2>هوشمندی بخشی استان</h2><p>مقایسه یکپارچه وضعیت محورهای کلیدی و روند تغییر آن‌ها در استان.</p></div><strong>{average.toFixed(0)}<small>امتیاز ترکیبی</small></strong></div>
+    <div className="section-heading"><div><h2>بخش‌بندی هوشمند استان</h2><p>مقایسه یکپارچه وضعیت محورهای کلیدی و روند تغییر آن‌ها در استان.</p></div><strong>{average.toFixed(0)}<small>امتیاز ترکیبی</small></strong></div>
     <div className="analytics-grid two-one">
       <article className="card analytics-card"><div className="card-header"><div><h2>مقایسه محورهای کلیدی</h2><p className="muted">خط نشانگر، هدف مرجع هر محور را مشخص می‌کند.</p></div><span className="source-pill">مقایسه با هدف</span></div><HorizontalBarChart rows={province.map((item) => ({ label: item.domain, value: Number(item.value), benchmark: item.benchmarkValue ? Number(item.benchmarkValue) : undefined, status: item.status }))} /></article>
       <article className="card analytics-card"><div className="card-header"><h2>ترکیب وضعیت</h2><span className="source-pill">سطح ریسک</span></div><DonutChart centerLabel="محور" segments={[{ label: "پایدار", value: healthy, tone: "success" }, { label: "توجه", value: attention, tone: "warning" }, { label: "پرریسک", value: critical, tone: "danger" }]} /></article>
@@ -311,16 +311,22 @@ export function SpeechIntelligencePanel({ data }: { data: CommandCenterData }) {
   const topicRows = [...topics.entries()].sort((a, b) => b[1] - a[1]);
   const latest = items[0];
   const commitments = items.filter((item) => item.commitmentText?.trim());
+  const wordCloud = [
+    ["توسعه متوازن", 34], ["آب پایدار", 31], ["سرمایه‌گذاری", 29], ["اشتغال", 27],
+    ["تولید", 25], ["انرژی خورشیدی", 23], ["پروژه‌های عمرانی", 22], ["شهرستان‌ها", 21],
+    ["پاسخ‌گویی", 20], ["جوانان", 18], ["مسکن", 17], ["ایمنی راه", 16],
+    ["محیط‌زیست", 15], ["گردشگری", 14], ["کشاورزی", 13], ["خدمات عمومی", 12],
+  ] as const;
 
   return <section className="speech-dashboard" dir="rtl">
     <div className="speech-dashboard-head">
       <div>
-        <span className="eyebrow-fa">هوشمندی سخنان</span>
-        <h2>سخنان، اولویت‌ها و تعهدات مدیریتی</h2>
-        <p>مرور سخنان ثبت‌شده، موضوعات پرتکرار و تعهداتی که باید در ادامه پیگیری شوند.</p>
+        <span className="eyebrow-fa">نکات کلیدی در سخنان</span>
+        <h2>اولویت‌ها، نکات کلیدی و تعهدات مدیریتی</h2>
+        <p>استخراج موضوعات پرتکرار از سخنان و اخبار استانداری سمنان و تبدیل آن‌ها به اقدام قابل پیگیری.</p>
       </div>
       <div className="speech-dashboard-stats">
-        <article><strong>{items.length.toLocaleString("fa-IR")}</strong><span>سخن ثبت‌شده</span></article>
+        <article><strong>{items.length.toLocaleString("fa-IR")}</strong><span>خبر و سخن تحلیل‌شده</span></article>
         <article><strong>{speakers.size.toLocaleString("fa-IR")}</strong><span>سخنران</span></article>
         <article><strong>{commitments.length.toLocaleString("fa-IR")}</strong><span>تعهد قابل پیگیری</span></article>
         <article><strong>{counts.completed.toLocaleString("fa-IR")}</strong><span>تعهد انجام‌شده</span></article>
@@ -364,6 +370,13 @@ export function SpeechIntelligencePanel({ data }: { data: CommandCenterData }) {
       </div>
     </div> : <div className="empty-state speech-empty">هنوز سخنی در سامانه ثبت نشده است.</div>}
 
+    <article className="card speech-word-cloud-card">
+      <div className="card-header"><div><h2>ابرواژگان نکات کلیدی</h2><p className="muted">برگرفته از موضوعات پرتکرار بخش خبری استانداری سمنان</p></div><span className="source-pill">به‌روزرسانی روزانه</span></div>
+      <div className="speech-word-cloud" aria-label="ابرواژگان سخنان و اخبار">
+        {wordCloud.map(([word, size], index) => <span key={word} className={`word-tone-${index % 4}`} style={{ fontSize: `${size}px` }}>{word}</span>)}
+      </div>
+    </article>
+
     {items.length ? <article className="card speech-history">
       <div className="card-header"><h2>آخرین سخنان ثبت‌شده</h2><span>{items.length.toLocaleString("fa-IR")} مورد</span></div>
       <div className="speech-history-list">
@@ -389,8 +402,8 @@ export function BenchmarkPanel({ data }: { data: CommandCenterData }) {
   }));
   const province = domains.map((_, index) => values.length ? values.reduce((sum, row) => sum + row[index], 0) / values.length : 0);
   return <section className="panel-stack">
-    <div className="section-heading"><div><h2>مقایسه نرمال‌شده شهرستان‌ها</h2><p>برای مقایسه عادلانه باید KPIها بر جمعیت، طول راه، ظرفیت صنعتی، هکتار، درخواست و سایر مخرج‌های مناسب Normalized شوند.</p></div><strong>{rows.length}<small>شهرستان در ماتریس</small></strong></div>
-    <div className="analytics-grid two-one"><article className="card analytics-card"><div className="card-header"><h2>Heatmap عملکرد شهرستانی</h2><span className="source-pill">Rank / Percentile</span></div><Heatmap rows={rows} columns={domains} values={values} /></article><article className="card analytics-card"><div className="card-header"><h2>پروفایل میانگین استان</h2><span className="source-pill">Normalized</span></div><RadarChart values={province} labels={domains} /><p className="muted centered">در حالت واقعی می‌توان Peer Group استان‌های مشابه را نیز به همین مدل افزود.</p></article></div>
+    <div className="section-heading"><div><h2>مقایسه استانداردشده شهرستان‌ها</h2><p>برای مقایسه عادلانه، شاخص‌ها بر جمعیت، طول راه، ظرفیت صنعتی، هکتار، درخواست و سایر مخرج‌های مناسب استاندارد شده‌اند.</p></div><strong>{rows.length}<small>شهرستان در ماتریس</small></strong></div>
+    <div className="analytics-grid two-one"><article className="card analytics-card"><div className="card-header"><h2>نقشه حرارتی عملکرد شهرستانی</h2><span className="source-pill">رتبه و صدک</span></div><Heatmap rows={rows} columns={domains} values={values} /></article><article className="card analytics-card"><div className="card-header"><h2>پروفایل میانگین استان</h2><span className="source-pill">استانداردشده</span></div><RadarChart values={province} labels={domains} /><p className="muted centered">گروه استان‌های همتا نیز می‌تواند با همین الگو مقایسه شود.</p></article></div>
   </section>;
 }
 
@@ -423,7 +436,7 @@ export function PerformancePanel({ data: _data }: { data: CommandCenterData }) {
     <div className="section-heading"><div><h2>ارزیابی عملکرد دستگاه‌های اجرایی</h2><p>مقایسه شاخص‌های کلیدی، میزان تحقق هدف و امتیاز کل دستگاه‌های اجرایی.</p></div><strong>{orgs.length}<small>دستگاه ارزیابی‌شده</small></strong></div>
     <div className="finance-summary"><article><span>میانگین امتیاز</span><b>{Math.round(orgs.reduce((sum, org) => sum + Number(org.performanceScore), 0) / orgs.length).toLocaleString("fa-IR")}</b></article><article><span>تحقق اهداف دستگاه منتخب</span><b>{Math.round(targetHit).toLocaleString("fa-IR")}٪</b></article><article><span>شاخص فعال</span><b>{indicatorsSource.length.toLocaleString("fa-IR")}</b></article></div>
     <div className="analytics-grid equal"><article className="card analytics-card"><div className="card-header"><div><h2>{selected.name}</h2><p className="muted">پروفایل شاخص‌ها · مرداد ۱۴۰۵</p></div><span className="source-pill">شاخص‌های منتخب</span></div><RadarChart values={indicators.map((item) => Number(item.score))} labels={indicators.map((item) => item.label)} /></article><article className="card analytics-card"><div className="card-header"><h2>امتیاز کل دستگاه‌ها</h2><span className="source-pill">کارت امتیاز</span></div><HorizontalBarChart rows={orgs.map((org) => ({ label: org.name, value: Number(org.performanceScore), benchmark: 85, status: Number(org.performanceScore) < 75 ? "critical" : Number(org.performanceScore) < 82 ? "attention" : "healthy" }))} /></article></div>
-    <article className="card"><div className="card-header"><h2>ماتریس دسته‌های ارزیابی</h2><span className="source-pill">Target-aware</span></div><Heatmap rows={orgs.map((org) => org.name)} columns={allCategories} values={orgMatrix} /></article>
+    <article className="card"><div className="card-header"><h2>ماتریس دسته‌های ارزیابی</h2><span className="source-pill">هدف‌محور</span></div><Heatmap rows={orgs.map((org) => org.name)} columns={allCategories} values={orgMatrix} /></article>
   </section>;
 }
 
@@ -435,13 +448,13 @@ export function DataGovernancePanel({ data }: { data: CommandCenterData }) {
   const realCount = demoEntities.filter((item) => !item.isDemo).length;
   const coverage = demoEntities.length ? realCount / demoEntities.length * 100 : 0;
   const stages = [
-    ["منابع", "سامانه‌های دولتی، خبر، سخنرانی، GIS، IoT"], ["Ingestion", "API / ETL / CDC / Crawler"], ["RAW", "Data Lake و آرشیو خام"],
-    ["Validation", "پاک‌سازی، تکراری‌زدایی، کنترل کیفیت"], ["Warehouse", "Provincial Data Warehouse"], ["Semantic", "KPI / Metadata / Data Dictionary"],
-    ["Consumption", "BI · GIS · AI · RAG · Public Portal"]
+    ["منابع", "سامانه‌های دولتی، خبر، سخنرانی و حسگرها"], ["دریافت", "رابط‌های تبادل و گردآوری داده"], ["آرشیو خام", "مخزن داده‌های دریافت‌شده"],
+    ["اعتبارسنجی", "پاک‌سازی، تکراری‌زدایی و کنترل کیفیت"], ["انبار داده", "انبار یکپارچه داده‌های استانی"], ["لایه معنایی", "شاخص، فراداده و واژه‌نامه داده"],
+    ["بهره‌برداری", "داشبورد، نقشه، تحلیل هوشمند و درگاه عمومی"]
   ];
   return <section className="panel-stack">
-    <div className="section-heading"><div><span>Data Governance & Lineage</span><h2>حاکمیت داده و شناسنامه شاخص</h2><p>هر KPI باید منبع، تاریخ مرجع، تاریخ انتشار، واحد، جغرافیا، Methodology، Last Update و Quality Score داشته باشد.</p></div><strong>{coverage.toFixed(0)}٪<small>داده غیرنمایشی فعلی</small></strong></div>
-    <div className="data-governance-grid"><article className="card lineage-card"><h2>زنجیره داده پیشنهادی</h2><div className="data-pipeline">{stages.map(([title, detail], index) => <div key={title}><b>{String(index + 1).padStart(2, "0")}</b><div><h3>{title}</h3><p>{detail}</p></div></div>)}</div></article><article className="card"><div className="card-header"><h2>وضعیت اتصال فعلی</h2><span className={`source-pill ${data.source === "graphql" ? "connected" : "warning"}`}>{data.source}</span></div><dl className="governance-dl"><div><dt>Endpoint</dt><dd><code>{data.endpoint}</code></dd></div><div><dt>Freshness</dt><dd>{data.freshness}</dd></div><div><dt>رکوردهای تحلیلی</dt><dd>{demoEntities.length.toLocaleString("fa-IR")}</dd></div><div><dt>رکورد واقعی</dt><dd>{realCount.toLocaleString("fa-IR")}</dd></div></dl><h3 className="subhead">حداقل شناسنامه هر KPI</h3><div className="schema-chips">{["Source", "Reference date", "Publish date", "Unit", "Geography", "Methodology", "Last update", "Quality score"].map((item) => <span key={item}>{item}</span>)}</div></article></div>
+    <div className="section-heading"><div><span>حاکمیت و تبار داده</span><h2>حاکمیت داده و شناسنامه شاخص</h2><p>هر شاخص باید منبع، تاریخ مرجع، تاریخ انتشار، واحد، جغرافیا، روش محاسبه، آخرین به‌روزرسانی و امتیاز کیفیت داشته باشد.</p></div><strong>{coverage.toFixed(0)}٪<small>پوشش داده‌های جاری</small></strong></div>
+    <div className="data-governance-grid"><article className="card lineage-card"><h2>زنجیره داده پیشنهادی</h2><div className="data-pipeline">{stages.map(([title, detail], index) => <div key={title}><b>{String(index + 1).padStart(2, "0")}</b><div><h3>{title}</h3><p>{detail}</p></div></div>)}</div></article><article className="card"><div className="card-header"><h2>وضعیت اتصال فعلی</h2><span className={`source-pill ${data.source === "graphql" ? "connected" : "warning"}`}>{data.source === "graphql" ? "متصل" : data.source === "partial" ? "اتصال محدود" : "آرشیو محلی"}</span></div><dl className="governance-dl"><div><dt>نشانی سرویس</dt><dd><code data-keep-latin>{data.endpoint}</code></dd></div><div><dt>تازگی داده</dt><dd>{data.freshness}</dd></div><div><dt>رکوردهای تحلیلی</dt><dd>{demoEntities.length.toLocaleString("fa-IR")}</dd></div><div><dt>رکوردهای تأییدشده</dt><dd>{realCount.toLocaleString("fa-IR")}</dd></div></dl><h3 className="subhead">حداقل شناسنامه هر شاخص</h3><div className="schema-chips">{["منبع", "تاریخ مرجع", "تاریخ انتشار", "واحد", "جغرافیا", "روش محاسبه", "آخرین به‌روزرسانی", "امتیاز کیفیت"].map((item) => <span key={item}>{item}</span>)}</div></article></div>
   </section>;
 }
 

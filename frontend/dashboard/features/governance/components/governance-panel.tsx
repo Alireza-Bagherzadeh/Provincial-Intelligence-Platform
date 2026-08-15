@@ -3,8 +3,9 @@
 import { useState } from "react";
 
 import { deputies, governorDecisions, governorTimeline } from "../data/governance";
+import type { CommandSectionId } from "../../../components/sidebar";
 
-export function GovernancePanel() {
+export function GovernancePanel({ onNavigate }: { onNavigate: (section: CommandSectionId) => void }) {
   const [selectedDeputy, setSelectedDeputy] = useState<(typeof deputies)[number] | null>(null);
 
   return <section className="governance-dashboard" aria-labelledby="governance-title">
@@ -43,7 +44,7 @@ export function GovernancePanel() {
       <small>{deputy.role}</small>
       <p>{deputy.note}</p>
       <strong>{deputy.action}</strong>
-      <button type="button" onClick={() => setSelectedDeputy(deputy)}>مشاهده گزارش به استاندار <span>←</span></button>
+      <div className="deputy-report-actions"><button type="button" onClick={() => setSelectedDeputy(deputy)}>مشاهده گزارش</button><button type="button" className="primary" onClick={() => onNavigate(deputy.panel)}>پنل اختصاصی <span>←</span></button></div>
     </article>)}</div>
 
     <div className="governance-section-title decisions-title">

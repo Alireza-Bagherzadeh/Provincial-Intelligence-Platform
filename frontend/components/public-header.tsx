@@ -6,6 +6,6 @@ export function PublicHeader() {
     <nav className="nav-links" aria-label="ناوبری اصلی">
       <a href="#province">نمای استان</a><a href="#intelligence">نبض استان</a><a href="#news">اخبار و گردشگری</a><a href="#transparency">شفافیت</a><a href="#services">خدمات</a>
     </nav>
-    <Link className="nav-cta" href="/command">مرکز فرماندهی <span>↗</span></Link>
+    <Link className="nav-cta" href="/login">ورود مدیران <span>←</span></Link>
   </header>;
 }
