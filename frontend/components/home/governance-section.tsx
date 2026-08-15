@@ -19,7 +19,11 @@ export function GovernanceSection({ data }: { data: PublicData }) {
       </div>
       <div className="governance-grid">
         <article className="command-feature">
-          <div className="feature-copy"><span className="feature-icon"><Icon name="pulse" /></span><span className="kicker">مرکز فرماندهی</span><h3>دید یکپارچه برای مدیریت لحظه‌ای</h3><p>پایش شاخص‌های کلیدی، هشدارها، پروژه‌ها و کیفیت داده در یک نمای عملیاتی منسجم.</p><a className="button button-outline" href="/command">ورود به مرکز فرماندهی <Icon name="arrow" /></a></div>
+          <div className="feature-heading">
+            <div className="feature-identity"><span className="feature-icon"><Icon name="pulse" /></span><span className="kicker">مرکز فرماندهی</span></div>
+            <h3>دید یکپارچه برای مدیریت لحظه‌ای</h3>
+          </div>
+          <div className="feature-copy"><p>پایش شاخص‌های کلیدی، هشدارها، پروژه‌ها و کیفیت داده در یک نمای عملیاتی منسجم.</p><a className="button button-gold command-cta" href="/command">ورود به مرکز فرماندهی <Icon name="arrow" /></a></div>
           <div className="command-visual" aria-hidden="true">
             <div className="visual-head"><i /><i /><i /><span>مرکز پایش استان</span></div>
             <div className="visual-body"><div className="visual-sidebar">{[1,2,3,4,5].map((i) => <i key={i} />)}</div><div className="visual-main"><div className="mini-kpis"><i/><i/><i/></div><div className="mini-chart">{[42,66,53,81,62,88,71,92].map((height, index) => <i key={index} style={{ height: `${height}%` }} />)}</div></div></div>
