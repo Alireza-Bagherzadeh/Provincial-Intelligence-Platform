@@ -8,7 +8,8 @@ export const landmarkSlides = [
   { src: "/images/kavir-rig-jen.jpg", title: "کویر ریگ جن", eyebrow: "طبیعت کویری · جنوب استان", description: "پهنه‌ای منحصربه‌فرد برای پژوهش، حفاظت و گردشگری مسئولانه" },
   { src: "/images/khane-kalantar.jpg", title: "خانه کلانتر", eyebrow: "معماری تاریخی · سمنان", description: "نمونه‌ای ارزشمند از معماری بومی و زیست شهری سمنان" },
   { src: "/images/shahrood-musuem.jpg", title: "موزه شاهرود", eyebrow: "فرهنگ و تاریخ · شاهرود", description: "مقصدی برای شناخت تاریخ، مردم و میراث فرهنگی شرق استان" },
-  { src: "/images/tange-zolomat.webp", title: "تنگه ظلمات", eyebrow: "منطقه توران · میامی", description: "چشم‌اندازی کم‌نظیر در زیست‌بوم حفاظت‌شده توران" }
+  { src: "/images/tange-zolomat.webp", title: "تنگه ظلمات", eyebrow: "منطقه توران · میامی", description: "چشم‌اندازی کم‌نظیر در زیست‌بوم حفاظت‌شده توران" },
+  { src: "/images/bayazid-bastami.jpg", title: "آرامگاه بایزید بسطامی", eyebrow: "میراث عرفانی · بسطام، شاهرود", description: "یکی از شاخص‌ترین یادمان‌های عرفانی و تاریخی بسطام؛ جایی که میراث معنوی و معماری تاریخی استان سمنان در کنار هم روایت می‌شوند" }
 ] as const;
 
 export const publicCounties: MapCounty[] = [
@@ -28,4 +29,3 @@ export const publicServices = [
   { icon: "briefcase", title: "فرصت‌های سرمایه‌گذاری", text: "کشف ظرفیت‌های شهرستانی و مسیرهای ارتباط با دستگاه‌های مسئول" },
   { icon: "users", title: "صدای مردم", text: "ثبت، پیگیری و تحلیل نظام‌مند مسائل و پیشنهادهای شهروندی" }
 ] as const;
-
